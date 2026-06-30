@@ -1,0 +1,27 @@
+# --- CMake & Ninja Build System ---
+build/
+build-*/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+*.ninja-deps
+*.ninja-log
+
+*.o
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.dll.a
+*.su
+
+*.exe
+*.out
+*.app
