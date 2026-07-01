@@ -36,24 +36,18 @@ void VectorPop(Vector *v, size_t index)
     if (index == v->count)
     {
         char *target_addr = (char *)v->data + (index + v->item_size);
-        memcpy(target_addr, 0, v->item_size);
         v->count--;
     }
     else
     {
-        void *tmp = (void *)malloc(v->item_size);
         char *current;
         char *ahead;
-        for (size_t i = index; i <= v->count; i++)
+        for (size_t i = index; i < v->count; i++)
         {
-            current = (char *)v->data + (index * v->item_size);
-            ahead = (char *)v->data + ((index + 1) * v->item_size);
-
-            memcpy(tmp, current, sizeof(v->item_size));
-            memcpy(current, ahead, sizeof(v->item_size));
-            memcpy(ahead, tmp, sizeof(v->item_size));
+            current = (char *)v->data + (i * v->item_size);
+            ahead = (char *)v->data + ((i + 1) * v->item_size);
+            memmove(current, ahead, v->item_size);
         }
-        free(tmp);
         v->count--;
     }
 }
