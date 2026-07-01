@@ -16,5 +16,15 @@ target_include_directories(vector
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+install(TARGETS vector
+    RUNTIME DESTINATION bin
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    DESTINATION include
+)
+
 include(CTest)
 add_subdirectory(tests)

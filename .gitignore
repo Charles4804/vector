@@ -25,3 +25,8 @@ _deps/
 *.exe
 *.out
 *.app
+
+tests/
+tests/*
+dist/*
+dist/
