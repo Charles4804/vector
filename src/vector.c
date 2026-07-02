@@ -63,9 +63,9 @@ void *VectorGet(Vector *v, size_t index)
 
 
 // work in progress
-void *VectorGetByValue(Vector *v, const void *value)
+void *VectorGetByValue(Vector *v, const void *value, int string)
 {
-    if (v->item_size == sizeof(char *))
+    if (string)
     {
         for (size_t i = 0; i < v->count; i++)
         {
@@ -91,7 +91,7 @@ void *VectorGetByValue(Vector *v, const void *value)
         for (size_t i = 0; i < v->count; i++)
         {
             char *target_addr = (char *)v->data + (i * v->item_size);
-            if ((void *)target_addr == value)
+            if (memcmp(target_addr, value, v->item_size) == 0)
             {
                 return (void *)target_addr;
             }
