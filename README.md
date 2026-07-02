@@ -11,7 +11,6 @@ A C library providing dynamic array functionality.
 This library provides a dynamic array implementation for C.
 
 **Dependencies:**
-- `stdio.h`
 - `stddef.h`
 - `string.h`
 - `stdlib.h`
