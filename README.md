@@ -10,6 +10,12 @@ A C library providing dynamic array functionality.
 ## About
 This library provides a dynamic array implementation for C.
 
+**Tools Used**
+- gcc
+- cmake
+- ninja
+- nvim
+
 **Dependencies:**
 - `stddef.h`
 - `string.h`
