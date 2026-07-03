@@ -60,7 +60,7 @@ int VectorPopByValue(Vector *v, const void *value, int string)
             char *target_addr = (char *)v->data + (i * v->item_size);
             char *ahead;
 
-            char *s = target_addr;
+            char *s1 = target_addr;
             char *s2 = (char *)value;
             
             while (!found && *s1 && (*s1 == *s2))
@@ -152,6 +152,7 @@ void *VectorGetByValue(Vector *v, const void *value, int string)
                 return (void *)target_addr;
             }
         }
+        return nullptr;
     }
 }
 
