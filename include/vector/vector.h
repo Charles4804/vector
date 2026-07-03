@@ -25,13 +25,13 @@ VECTOR_API
 int VectorPop(Vector *v, size_t index);
 
 VECTOR_API
-int VectorPopByValue(Vector *v, const void *value); // WORK IN PROGRESS
+int VectorPopByValue(Vector *v, const void *value, int string);
 
 VECTOR_API
 void *VectorGet(Vector *v, size_t index);
 
 VECTOR_API
-void *VectorGetByValue(Vector *v, const void *value); // WORK IN PROGRESS
+void *VectorGetByValue(Vector *v, const void *value, int string); 
 
 VECTOR_API
 size_t VectorGetCount(Vector *v);

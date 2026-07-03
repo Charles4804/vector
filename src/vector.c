@@ -34,7 +34,6 @@ int VectorPop(Vector *v, size_t index)
     }
     if (index == v->count)
     {
-        char *target_addr = (char *)v->data + (index + v->item_size);
         v->count--;
     }
     else
@@ -51,9 +50,67 @@ int VectorPop(Vector *v, size_t index)
     }
 }
 
-int VectorPopByValue(Vector *v, const void *value)
+int VectorPopByValue(Vector *v, const void *value, int string)
 {
-    // TODO
+    if (string)
+    {
+        int found = 0;
+        for (size_t i = 0; i < v->count; i++)
+        {
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            char *ahead;
+
+            char *s = target_addr;
+            char *s2 = (char *)value;
+            
+            while (!found && *s1 && (*s1 == *s2))
+            {
+                s1++;
+                s2++;
+            }
+            if (!found && *s1 == '\0' && *s2 == '\0')
+            {
+                found = 1;
+                if (i == v->count)
+                {
+                    v->count--;
+                    break;
+                }
+                i = 0;
+            }
+            else if (found)
+            {
+                ahead = (char *)v->data + ((i + 1) * v->item_size);
+                memmove(target_addr, ahead, v->item_size);
+            }
+        }
+        v->count--;
+    }
+    else 
+    {
+        int found = 0;
+        for (size_t i = 0; i < v->count; i++)
+        {
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            char *ahead;
+            if (!found && memcmp(target_addr, value, v->item_size) == 0)
+            {
+                found = 1;
+                if (i == v->count)
+                {
+                    v->count--;
+                    break;
+                }
+                i = 0;
+            }
+            else if (found)
+            {
+                ahead = (char *)v->data + ((i + 1) * v->item_size);
+                memmove(target_addr, ahead, v->item_size);
+            }
+        }
+        v->count--;
+    }
 }
 
 void *VectorGet(Vector *v, size_t index)
@@ -62,7 +119,6 @@ void *VectorGet(Vector *v, size_t index)
 }
 
 
-// work in progress
 void *VectorGetByValue(Vector *v, const void *value, int string)
 {
     if (string)
