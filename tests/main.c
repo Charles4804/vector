@@ -1,30 +1,24 @@
 #include "vector/vector.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, const char *argv[])
 {
-    printf("%s : running tests\n", argv[0]);
     Vector *v = (Vector *)malloc(sizeof(Vector));
-    char *st = "MATE";
-    VectorNew(v, sizeof(char *));
+
+    VectorNew(v, sizeof(int));
     
-    VectorPush(v, "hello");
-    VectorPush(v, "World");
-
-    printf("%zu\n", v->capacity);
-
-    VectorPush(v, st);
-
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
-    printf("0: %s 1: %s 2: %s\n", (char *)VectorGet(v, 0), (char *)VectorGet(v, 1), (char *)VectorGet(v, 2));
-    printf("%s, %s, %s\n", (char *)VectorGetByName(v, "hello"), (char *)VectorGetByName(v, "World"), (char *)VectorGetByName(v, "Mate"));
-    VectorPop(v, 2);
-    printf("%zu count\n", v->count);
+    VectorPush(v, &(int){2});
+    VectorPush(v, &(int){64242342});
+    VectorPush(v, &(int){2342934});
+    printf("%zu, %zu\n", v->count, v->capacity);
+    printf("0: %d, 1 : %d, 2 : %d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1), *(int *)VectorGet(v, 2));
+    printf("value :: 0 : %d 1 : %d 2 : %d\n", *(int *)VectorGetByValue(v, &(int){2}, 0), *(int *)VectorGetByValue(v, &(int){64242342}, 0), *(int *)VectorGetByValue(v, &(int){2342934}, 0));
     VectorPop(v, 0);
-    printf("%zu cont\n", v->count);
-    printf("0: %s\n", (char *)VectorGet(v, 0));
-    VectorPush(v, "kjeh");
-    printf("1: %s\n", (char *)VectorGet(v, 1));
+    VectorPop(v, 0);
+    printf("count : %zu capacity : %zu\n", v->count, v->capacity);
+    printf("0: %d\n", *(int *)VectorGet(v, 0));
 
     VectorFree(v);
     free(v);

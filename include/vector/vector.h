@@ -3,7 +3,6 @@
 
 #define VECTOR_API __attribute__((visibility("default")))
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
@@ -20,19 +19,19 @@ VECTOR_API
 void VectorNew(Vector *v, size_t item_size);
 
 VECTOR_API
-void VectorPush(Vector *v, const void *item);
+int VectorPush(Vector *v, const void *item);
 
 VECTOR_API
-void VectorPop(Vector *v, size_t index);
+int VectorPop(Vector *v, size_t index);
 
 VECTOR_API
-void VectorPopByName(Vector *v, const char *name);
+int VectorPopByValue(Vector *v, const void *value, int string);
 
 VECTOR_API
 void *VectorGet(Vector *v, size_t index);
 
 VECTOR_API
-void *VectorGetByName(Vector *v, const char *name); // Only works if the memory address contains the string                                                     //directly
+void *VectorGetByValue(Vector *v, const void *value, int string); 
 
 VECTOR_API
 size_t VectorGetCount(Vector *v);

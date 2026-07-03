@@ -8,7 +8,7 @@ void VectorNew(Vector *v, size_t item_size)
     v->data = (void *)malloc(v->capacity * v->item_size);
 }
 
-void VectorPush(Vector *v, const void *item)
+int VectorPush(Vector *v, const void *item)
 {
     if (v->count == v->capacity)
     {
@@ -16,26 +16,24 @@ void VectorPush(Vector *v, const void *item)
         v->capacity *= 2;
         if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
         {
-            printf("VECTOR : ERROR CANNOT RESIZE DATA; function : 'VectorPush' line 11");
-            exit(-1);
+            return 1;
         }
         v->data = tmp;
     }
     char *target_addr = (char *)v->data + (v->count * v->item_size);
     memcpy(target_addr, item, v->item_size);
     v->count++;
+    return 0;
 }
 
-void VectorPop(Vector *v, size_t index)
+int VectorPop(Vector *v, size_t index)
 {
     if (index > v->count)
     {
-        printf("VECTOR : ERROR, index %zu is out of bound", index);
-        exit(-1);
+        return 1;
     }
     if (index == v->count)
     {
-        char *target_addr = (char *)v->data + (index + v->item_size);
         v->count--;
     }
     else
@@ -52,9 +50,67 @@ void VectorPop(Vector *v, size_t index)
     }
 }
 
-void VectorPopByName(Vector *v, const char *name)
+int VectorPopByValue(Vector *v, const void *value, int string)
 {
-    //TODO
+    if (string)
+    {
+        int found = 0;
+        for (size_t i = 0; i < v->count; i++)
+        {
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            char *ahead;
+
+            char *s1 = target_addr;
+            char *s2 = (char *)value;
+            
+            while (!found && *s1 && (*s1 == *s2))
+            {
+                s1++;
+                s2++;
+            }
+            if (!found && *s1 == '\0' && *s2 == '\0')
+            {
+                found = 1;
+                if (i == v->count)
+                {
+                    v->count--;
+                    break;
+                }
+                i = 0;
+            }
+            else if (found)
+            {
+                ahead = (char *)v->data + ((i + 1) * v->item_size);
+                memmove(target_addr, ahead, v->item_size);
+            }
+        }
+        v->count--;
+    }
+    else 
+    {
+        int found = 0;
+        for (size_t i = 0; i < v->count; i++)
+        {
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            char *ahead;
+            if (!found && memcmp(target_addr, value, v->item_size) == 0)
+            {
+                found = 1;
+                if (i == v->count)
+                {
+                    v->count--;
+                    break;
+                }
+                i = 0;
+            }
+            else if (found)
+            {
+                ahead = (char *)v->data + ((i + 1) * v->item_size);
+                memmove(target_addr, ahead, v->item_size);
+            }
+        }
+        v->count--;
+    }
 }
 
 void *VectorGet(Vector *v, size_t index)
@@ -62,26 +118,42 @@ void *VectorGet(Vector *v, size_t index)
     return (void *)((char *)v->data + (index * v->item_size));
 }
 
-void *VectorGetByName(Vector *v, const char *name)
+
+void *VectorGetByValue(Vector *v, const void *value, int string)
 {
-    for (size_t i = 0; i < v->count; i++)
+    if (string)
     {
-        char *target_addr = (char *)v->data + (i * v->item_size);
-        char *s1 = target_addr;
-        char *s2 = (char *)name;
-
-        while (*s1 && (*s1 == *s2))
+        for (size_t i = 0; i < v->count; i++)
         {
-            s1++;
-            s2++;
-        }
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            char *s1 = target_addr;
+            char *s2 = (char *)value;
+            
+            while (*s1 && (*s1 == *s2))
+            {
+                s1++;
+                s2++;
+            }
 
-        if (*s1 == '\0' && *s2 == '\0')
-        {
-            return (void *)target_addr;
+            if (*s1 == '\0' && *s2 == '\0')
+            {
+                return (void *)target_addr;
+            }
         }
+        return nullptr;   
+    }   
+    else
+    {
+        for (size_t i = 0; i < v->count; i++)
+        {
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            if (memcmp(target_addr, value, v->item_size) == 0)
+            {
+                return (void *)target_addr;
+            }
+        }
+        return nullptr;
     }
-    return nullptr;
 }
 
 size_t VectorGetCount(Vector *v)
@@ -113,8 +185,7 @@ size_t VectorGetIndexByName(Vector *v, const char *name)
             return i;
         }
     }
-    printf("VECTOR : ERROR, cannot find index of name : %s", name);
-    exit(-1);    
+    return 1;    
 }
 
 void VectorFree(Vector *v)
