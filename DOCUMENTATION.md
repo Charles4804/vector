@@ -10,7 +10,7 @@ vector - dynamic array library
 A C Library that provides a dynamic array.
 
 ## SYNOPSIS
-```
+```c
 #include "vector/vector.h"
 
 typedef struct
