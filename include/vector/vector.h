@@ -40,7 +40,7 @@ VECTOR_API
 size_t VectorGetCapacity(Vector *v);
 
 VECTOR_API
-size_t VectorGetIndexByName(Vector *v, const char *name);
+size_t VectorGetIndexByValue(Vector *v, const void *value, int string);
 
 VECTOR_API
 void VectorFree(Vector *v);

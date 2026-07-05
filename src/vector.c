@@ -35,6 +35,7 @@ int VectorPop(Vector *v, size_t index)
     if (index == v->count)
     {
         v->count--;
+        return 0;
     }
     else
     {
@@ -47,7 +48,9 @@ int VectorPop(Vector *v, size_t index)
             memmove(current, ahead, v->item_size);
         }
         v->count--;
+        return 0;
     }
+    return 1;
 }
 
 int VectorPopByValue(Vector *v, const void *value, int string)
@@ -84,7 +87,12 @@ int VectorPopByValue(Vector *v, const void *value, int string)
                 memmove(target_addr, ahead, v->item_size);
             }
         }
+        if (!found)
+        {
+            return 1;
+        }
         v->count--;
+        return 0;
     }
     else 
     {
@@ -109,7 +117,12 @@ int VectorPopByValue(Vector *v, const void *value, int string)
                 memmove(target_addr, ahead, v->item_size);
             }
         }
+        if (!found)
+        {
+            return 1;
+        }
         v->count--;
+        return 0;
     }
 }
 
@@ -166,26 +179,46 @@ size_t VectorGetCapacity(Vector *v)
     return v->capacity;
 }
 
-size_t VectorGetIndexByName(Vector *v, const char *name)
+size_t VectorGetIndexByValue(Vector *v, const void *value, int string)
 {
-    for (size_t i = 0; i < v->count; i++)
+    if (string)
     {
-        char *target_addr = (char *)v->data + (i * v->item_size);
-        char *s1 = target_addr;
-        char *s2 = (char *)name;
-
-        while (*s1 && (*s1 == *s2))
+        char *target_addr;
+        char *s1;
+        char *s2 = (char *)value;
+        for (size_t i = 0; i < v->count; i++)
         {
-            s1++;
-            s2++;
-        }
+            target_addr = (char *)v->data + (i * v->item_size);
+            s1 = target_addr;
 
-        if (*s1 == '\0' && *s2 == '\0')
-        {
-            return i;
+            while (*s1 && (*s1 == *s2))
+            {
+                s1++;
+                s2++;
+            }
+
+            if (*s1 == '\0' && *s2 == '\0')
+            {
+                return i;
+            }
         }
+        return -1;
+    }   
+    else
+    {
+        char *target_addr;
+        for (size_t i = 0; i < v->count; i++)
+        {
+            target_addr = (char *)v->data + (i * v->item_size);
+
+            if (memcmp(target_addr, value, v->item_size))
+            {
+                return i;
+            }
+        }
+        return -1;
     }
-    return 1;    
+    return -1;
 }
 
 void VectorFree(Vector *v)
