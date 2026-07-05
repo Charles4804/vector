@@ -1,6 +1,7 @@
 # VECTOR : DOCUMENTATION
 **Table of Contents**
 - [About](#name)
+- [Synopsis](#synopsis)
 
 ## NAME
 vector - dynamic array library
