@@ -28,16 +28,22 @@ VECTOR_API
 int VectorPopByValue(Vector *v, const void *value, int string);
 
 VECTOR_API
+int VectorValueExists(Vector *v, const void *value, int string);
+
+VECTOR_API
 void *VectorGet(Vector *v, size_t index);
 
 VECTOR_API
 void *VectorGetByValue(Vector *v, const void *value, int string); 
 
 VECTOR_API
-size_t VectorGetCount(Vector *v);
+void VectorReplace(Vector *v, size_t index, const void *value);
+
+VECTOR_API 
+size_t VectorGetCount(Vector *v); 
 
 VECTOR_API
-size_t VectorGetCapacity(Vector *v);
+size_t VectorGetCapacity(Vector *v); 
 
 VECTOR_API
 size_t VectorGetIndexByValue(Vector *v, const void *value, int string);

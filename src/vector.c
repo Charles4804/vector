@@ -58,13 +58,15 @@ int VectorPopByValue(Vector *v, const void *value, int string)
     if (string)
     {
         int found = 0;
+        char *target_addr;
+        char *ahead;
+        char *s1;
+        char *s2 = (char *)value;
         for (size_t i = 0; i < v->count; i++)
         {
-            char *target_addr = (char *)v->data + (i * v->item_size);
-            char *ahead;
+            target_addr = (char *)v->data + (i * v->item_size);
 
-            char *s1 = target_addr;
-            char *s2 = (char *)value;
+            s1 = target_addr;
             
             while (!found && *s1 && (*s1 == *s2))
             {
@@ -97,10 +99,12 @@ int VectorPopByValue(Vector *v, const void *value, int string)
     else 
     {
         int found = 0;
+        char *ahead;
+        char *target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
-            char *target_addr = (char *)v->data + (i * v->item_size);
-            char *ahead;
+            target_addr = (char *)v->data + (i * v->item_size);
+            
             if (!found && memcmp(target_addr, value, v->item_size) == 0)
             {
                 found = 1;
@@ -126,6 +130,48 @@ int VectorPopByValue(Vector *v, const void *value, int string)
     }
 }
 
+int VectorValueExists(Vector *v, const void *value, int string)
+{
+    if (string)
+    {
+        for (size_t i = 0; i < v->count; i++)
+        {
+            char *target_addr = (char *)v->data + (i * v->item_size);
+            char *ahead;
+
+            char *s1 = target_addr;
+            char *s2 = (char *)value;
+            
+            while (*s1 && (*s1 == *s2))
+            {
+                s1++;
+                s2++;
+            }
+            if (*s1 == '\0' && *s2 == '\0')
+            {
+                return 0;
+            }
+        }
+        return 1;
+    }
+    else 
+    {
+        char *ahead;
+        char *target_addr;
+        for (size_t i = 0; i < v->count; i++)
+        {
+            target_addr = (char *)v->data + (i * v->item_size);
+            
+            if (memcmp(target_addr, value, v->item_size) == 0)
+            {
+                return 0;            
+            }
+        }
+        return 1;
+    }
+
+}
+
 void *VectorGet(Vector *v, size_t index)
 {
     return (void *)((char *)v->data + (index * v->item_size));
@@ -136,11 +182,14 @@ void *VectorGetByValue(Vector *v, const void *value, int string)
 {
     if (string)
     {
+        char *target_addr;
+        char *s1;
+        char *s2;
         for (size_t i = 0; i < v->count; i++)
         {
-            char *target_addr = (char *)v->data + (i * v->item_size);
-            char *s1 = target_addr;
-            char *s2 = (char *)value;
+            target_addr = (char *)v->data + (i * v->item_size);
+            s1 = target_addr;
+            s2 = (char *)value;
             
             while (*s1 && (*s1 == *s2))
             {
@@ -157,9 +206,10 @@ void *VectorGetByValue(Vector *v, const void *value, int string)
     }   
     else
     {
+        char *target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
-            char *target_addr = (char *)v->data + (i * v->item_size);
+            target_addr= (char *)v->data + (i * v->item_size);
             if (memcmp(target_addr, value, v->item_size) == 0)
             {
                 return (void *)target_addr;
@@ -167,6 +217,12 @@ void *VectorGetByValue(Vector *v, const void *value, int string)
         }
         return nullptr;
     }
+}
+
+void VectorReplace(Vector *v, size_t index, const void *value)
+{
+    char *target_addr = (char *)v->data + (index * v->item_size);
+    memcpy(target_addr, value, v->item_size);
 }
 
 size_t VectorGetCount(Vector *v)
