@@ -1,5 +1,9 @@
-# Vector: A Dynamic Array Library
-
+ _    ________________________  ____ 
+| |  / / ____/ ____/_  __/ __ \/ __ \
+| | / / __/ / /     / / / / / / /_/ /
+| |/ / /___/ /___  / / / /_/ / _, _/ 
+|___/_____/\____/ /_/  \____/_/ |_|  
+                                     
 A C library providing dynamic array functionality.
 
 ## Table of Contents
