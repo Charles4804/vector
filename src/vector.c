@@ -1,4 +1,4 @@
-#include "vector/vector.h"
+#include "Vector/vector.h"
 
 // ||||||||||||||||||||||||||||||||||||||||||
 //   _    ________________________  ____  |||
@@ -137,6 +137,30 @@ int VectorPopByValue(Vector *v, const void *value, int string)
         v->count--;
         return 0;
     }
+}
+
+int VectorPopUnsafe(Vector *v, size_t index)
+{
+    if (index == v->count)
+    {
+        v->count--;
+        return 0;
+    }
+    else
+    { 
+        char *current;
+        char *ahead;
+        for (size_t i = index; i < v->count; i++)
+        {
+            current = (char *)v->data + (i * v->item_size);
+            ahead = (char *)v->data + ((i + 1) * v->item_size);
+            memmove(current, ahead, v->item_size);
+        }
+        v->count--;
+        return 0;
+    }
+    return 1;
+   
 }
 
 int VectorValueExists(Vector *v, const void *value, int string)

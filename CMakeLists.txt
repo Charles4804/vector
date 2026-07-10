@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(vector VERSION 1.0.0 LANGUAGES C)
+project(Vector VERSION 1.0.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -7,8 +7,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_INLINES_VISIBILITY_ON 1)
 
-add_library(vector SHARED src/vector.c)
-target_include_directories(vector 
+add_library(Vector SHARED src/vector.c)
+target_include_directories(Vector 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -16,14 +16,31 @@ target_include_directories(vector
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-install(TARGETS vector
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
+set_target_properties(Vector PROPERTIES
+    OUTPUT_NAME "Vector"     
+    PREFIX ""
+    IMPORT_PREFIX ""
+)
+
+
+include(GNUInstallDirs)
+
+install(TARGETS Vector
+    EXPORT VectorTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION include
+)
+
+install(EXPORT VectorTargets
+    FILE VectorTargets.cmake
+    NAMESPACE Vector::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Vector
 )
 
 include(CTest)

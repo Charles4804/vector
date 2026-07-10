@@ -38,6 +38,9 @@ VECTOR_API
 int VectorPopByValue(Vector *v, const void *value, int string);
 
 VECTOR_API
+int VectorPopUnsafe(Vector *v, size_t index);
+
+VECTOR_API
 int VectorValueExists(Vector *v, const void *value, int string);
 
 VECTOR_API
