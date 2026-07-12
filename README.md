@@ -36,9 +36,9 @@ To use the library, add the installation path to your system's environment varia
 Add the following to your `CMakeLists.txt`:
 
 ```cmake
-find_package(vector REQUIRED)
-
-target_link_libraries(<add_executable_name> PRIVATE vector::vector)
+list(APPEND CMAKE_PREFIX_PATH "<path_to_extracted_library>") # NOT THE bin/ THE WHOLE FOLDER OR THE PARENT
+find_package(Vector REQUIRED)
+target_link_libraries(<target> PUBLIC Vector::Vector)
 ```
 
 ### Usage Example
