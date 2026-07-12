@@ -43,5 +43,26 @@ install(EXPORT VectorTargets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Vector
 )
 
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/VectorConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/VectorConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/VectorConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Vector
+)
+
+install(FILES 
+    "${CMAKE_CURRENT_BINARY_DIR}/VectorConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/VectorConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Vector
+)
+
+
 include(CTest)
 add_subdirectory(tests)
