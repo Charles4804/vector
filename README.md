@@ -27,7 +27,7 @@ This library provides a dynamic array implementation for C.
 - `stdlib.h`
 
 ## Installation
-Download the latest release from the [Releases]([##############################################]) section.
+Download the latest release from the [Releases](https://github.com/Charles4804/vector/releases) section.
 
 ## Implementation
 To use the library, add the installation path to your system's environment variables (PATH).
