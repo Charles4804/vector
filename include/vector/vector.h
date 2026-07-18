@@ -44,6 +44,9 @@ VECTOR_API
 int VectorValueExists(Vector *v, const void *value, int string);
 
 VECTOR_API
+int VectorInsert(Vector *v, size_t index, const void *value);
+
+VECTOR_API
 void *VectorGet(Vector *v, size_t index);
 
 VECTOR_API

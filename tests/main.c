@@ -19,10 +19,15 @@ int main(int argc, const char *argv[])
     VectorPop(v, 0);
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0: %d\n", *(int *)VectorGet(v, 0));
-    printf("value 132 exists : %d", VectorValueExists(v, &(int){132}, 0));
-    printf("value 2342934 exists : %d", VectorValueExists(v, &(int){2342934}, 0));
+    printf("value 132 exists : %d\n", VectorValueExists(v, &(int){132}, 0));
+    printf("value 2342934 exists : %d\n", VectorValueExists(v, &(int){2342934}, 0));
     VectorReplace(v, 0, &(int){243});
-    printf("0: %d", *(int *)VectorGet(v, 0));
+    printf("0: %d\n", *(int *)VectorGet(v, 0));
+    printf("error code : %d\n", VectorInsert(v, 0, &(int){67}));
+    printf("%zu %zu\n", v->count, v->capacity);
+    printf("0: %d 1: %d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1));
+    printf("error code : %d\n", VectorInsert(v, 1, &(int){6767}));
+    printf("0: %d, 1: %d 2: %d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1), *(int *)VectorGet(v, 2));
     VectorFree(v);
     free(v);
     return 0;
