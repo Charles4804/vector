@@ -234,6 +234,31 @@ int VectorInsert(Vector *v, size_t index, const void *value)
     return 0;    
 }
 
+int VectorInsertUnsafe(Vector *v, size_t index, const void *value)
+{
+    if (v->count == v->capacity)
+    {
+        void *tmp;
+        v->capacity *= 2;
+        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
+        {
+            return 1;
+        }
+        v->data = tmp;
+    }
+    char *current;
+    char *ahead;
+    for (size_t i = v->count + 1; i > index; i--)
+    {
+        current = (char *)v->data + (i * v->item_size);
+        ahead = (char *)v->data + ((i - 1) * v->item_size);
+        memmove(current, ahead, v->item_size);
+    }
+    memcpy(ahead, value, v->item_size);
+    v->count++;
+    return 0;    
+}
+
 void *VectorGet(Vector *v, size_t index)
 {
     return (void *)((char *)v->data + (index * v->item_size));
