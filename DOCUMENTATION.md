@@ -27,6 +27,8 @@ int VectorPopByValue(Vector *v, const void *value, int string);
 void *VectorGet(Vector *v, size_t index);
 void *VectorGetByValue(Vector *v, const void *value, int string);
 void VectorReplace(Vector *v, size_t index, const void *value);
+int VectorInsert(Vector *v, size_t index, const void *value);
+int VectorInsertUnsafe(Vector *v, size_t index, const void *value);
 size_t VectorGetCount(Vector *v);
 size_t VectorGetCapacity(Vector *v);
 size_t VectorGetIndexByValue(Vector *v, const void *value, int string);
@@ -45,6 +47,8 @@ void VectorFree(Vector *v);
 | `VectorGetByValue` | Searches for the first index matching the provided value and returns a pointer to it. |
 | `VectorGetCount` | Returns the number of elements currently stored in the vector. |
 | `VectorReplace` | Replaces an index with a new value. |
+|`VectorInsert` | Inserts an item to the specified index. |
+|`VectorInsertUnsafe` | Inserts an item to the specifie index without checking if the index surpasses ++count < cap. |
 | `VectorGetCapacity` | Returns the total number of elements the vector can currently hold before resizing. |
 | `VectorGetIndexByValue` | Returns the index of the first occurrence of a specific value. |
 | `VectorFree` | Deallocates internal memory and resets vector fields to default states. |
