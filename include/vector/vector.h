@@ -50,6 +50,9 @@ VECTOR_API
 int VectorInsertUnsafe(Vector *v, size_t index, const void *value);
 
 VECTOR_API
+int VectorAddRange(Vector *dest ,Vector *v);
+
+VECTOR_API
 void *VectorGet(Vector *v, size_t index);
 
 VECTOR_API
