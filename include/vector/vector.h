@@ -41,6 +41,12 @@ VECTOR_API
 int VectorPopUnsafe(Vector *v, size_t index);
 
 VECTOR_API
+int VectorPopRange(Vector *v, size_t a, size_t b);
+
+VECTOR_API
+int VectorPopRangeUnsafe(Vector *v, size_t a, size_t b);
+
+VECTOR_API
 int VectorValueExists(Vector *v, const void *value, int string);
 
 VECTOR_API

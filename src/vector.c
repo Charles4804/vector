@@ -163,6 +163,54 @@ int VectorPopUnsafe(Vector *v, size_t index)
    
 }
 
+int VectorPopRange(Vector *v ,size_t a, size_t b)
+{
+    if (a < 0 || a > v->capacity || b < 0 || b > v->count || a > b || b < a)
+    {
+        return 1;
+    }
+    size_t r = (b - a) + 1;
+
+    if (b == v->count)
+    {
+        v->count -= r;
+    }
+
+    char *target_addr;
+    char *src_addr;
+
+    for (; b < v->count; a++)
+    {
+        target_addr = (char *)v->data + (a * v->item_size);
+        b += 1;
+        src_addr = (char *)v->data + (b * v->item_size);
+        memmove(target_addr, src_addr, v->item_size);
+    }
+    v->count -= r;
+}
+
+int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
+{
+    size_t r = (b - a) + 1;
+
+    if (b == v->count)
+    {
+        v->count -= r;
+    }
+
+    char *target_addr;
+    char *src_addr;
+
+    for (; b < v->count; a++)
+    {
+        target_addr = (char *)v->data + (a * v->item_size);
+        b += 1;
+        src_addr = (char *)v->data + (b * v->item_size);
+        memmove(target_addr, src_addr, v->item_size);
+    }
+    v->count -= r;
+}
+
 int VectorValueExists(Vector *v, const void *value, int string)
 {
     if (string)

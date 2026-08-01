@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, const char *argv[])
+void Test()
 {
     Vector *v = (Vector *)malloc(sizeof(Vector));
 
@@ -30,5 +30,31 @@ int main(int argc, const char *argv[])
     printf("0: %d, 1: %d 2: %d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1), *(int *)VectorGet(v, 2));
     VectorFree(v);
     free(v);
+}
+
+void Test2()
+{
+    Vector *v = (Vector *)malloc(sizeof(Vector));
+
+    VectorNew(v, sizeof(int));
+
+    printf("count : %zu capacity : %zu\n", v->count, v->capacity);
+    VectorPush(v, &(int){2});
+    VectorPush(v, &(int){64242342});
+    VectorPush(v, &(int){2342934});
+    VectorPush(v, &(int){12322});
+    VectorPush(v, &(int){2312});
+    printf("0 : %d 1 : %d 2 : %d 3 : %d 4 : %d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1), *(int *)VectorGet(v, 2), *(int *)VectorGet(v, 3), *(int *)VectorGet(v, 4));
+    printf("count : %zu capacity : %zu\n", v->count, v->capacity);
+    VectorPopRangeUnsafe(v, 1, 3);
+    printf("count : %zu capacity : %zu\n", v->count, v->capacity);
+    printf("0 : %d 1:%d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1));
+    VectorFree(v);
+    free(v);
+}
+
+int main(int argc, const char *argv[])
+{
+    Test2();
     return 0;
 }
