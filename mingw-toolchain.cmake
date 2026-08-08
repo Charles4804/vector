@@ -1,0 +1,13 @@
+# Identify the target operating system as Windows
+set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_SYSTEM_PROCESSOR x86_64)
+
+# Set the cross-compiler binary names for pure C
+set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+set(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)
+
+# Force CMake to search for files inside the target system layout
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+

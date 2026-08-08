@@ -8,6 +8,9 @@ set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_INLINES_VISIBILITY_ON 1)
 
 add_library(Vector SHARED src/vector.c)
+
+target_compile_definitions(Vector PRIVATE WINDOWS_DLL)
+
 target_include_directories(Vector 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -31,8 +34,8 @@ install(TARGETS Vector
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
 
+)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION include
 )

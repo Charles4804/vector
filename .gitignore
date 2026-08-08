@@ -1,6 +1,7 @@
 # --- CMake & Ninja Build System ---
 build/
 build-*/
+build_*/
 CMakeCache.txt
 CMakeFiles/
 CMakeScripts/
@@ -22,7 +23,7 @@ _deps/
 *.dll.a
 *.su
 *.cmake.in
-
+*.sh
 *.exe
 *.out
 *.app
