@@ -32,3 +32,5 @@ tests/
 tests/*
 dist/*
 dist/
+release/*
+release
