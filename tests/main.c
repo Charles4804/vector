@@ -52,7 +52,7 @@ void Test2() {
          *(int *)VectorGet(v, 1), *(int *)VectorGet(v, 2),
          *(int *)VectorGet(v, 3), *(int *)VectorGet(v, 4));
   printf("count : %zu capacity : %zu\n", v->count, v->capacity);
-  VectorPopRangeUnsafe(v, 1, 3);
+  VectorPopRangeFast(v, 1, 3);
   printf("count : %zu capacity : %zu\n", v->count, v->capacity);
   printf("0 : %d 1:%d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1));
   VectorFree(v);

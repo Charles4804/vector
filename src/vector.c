@@ -46,20 +46,24 @@ int VectorPop(Vector *v, size_t index)
         v->count--;
         return 0;
     }
-    else
+    char *current;
+    char *ahead;
+    for (size_t i = index; i < v->count; i++)
     {
-        char *current;
-        char *ahead;
-        for (size_t i = index; i < v->count; i++)
-        {
-            current = (char *)v->data + (i * v->item_size);
-            ahead = (char *)v->data + ((i + 1) * v->item_size);
-            memmove(current, ahead, v->item_size);
-        }
-        v->count--;
-        return 0;
+        current = (char *)v->data + (i * v->item_size);
+        ahead = (char *)v->data + ((i + 1) * v->item_size);
+        memmove(current, ahead, v->item_size);
     }
-    return 1;
+    v->count--;
+    return 0;
+}
+
+void VectorPopFast(Vector *v, size_t index)
+{
+    char *target_addr = (char *)v->data + (v->item_size * index);
+    char *src_addr = (char *)v->data + (v->item_size * (index + 1));
+    memmove(target_addr, src_addr, v->item_size * (v->count - index));
+    v->count--;
 }
 
 int VectorPopByValue(Vector *v, const void *value, int string)
@@ -187,6 +191,33 @@ int VectorPopRange(Vector *v ,size_t a, size_t b)
         memmove(target_addr, src_addr, v->item_size);
     }
     v->count -= r;
+    return 0;
+}
+
+void VectorPopRangeFast(Vector *v, size_t a, size_t b)
+{
+    size_t r = (b - a) + 1;
+    size_t s = v->count - (b + 1);
+    char *target_addr = (char *)v->data + (v->item_size * a);
+    char *src_addr = (char *)v->data + (v->item_size * (b + 1));
+
+    memmove(target_addr, src_addr, v->item_size * s);
+    
+    if (s < r)
+    {
+        v->count -= r - s;
+        return;
+    }
+    if (s == r)
+    {
+        v->count -= s;
+        return;
+    }
+    if (s > r)
+    {
+        v->count -= s - r;
+        return;
+    }
 }
 
 int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
@@ -201,14 +232,15 @@ int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
     char *target_addr;
     char *src_addr;
 
-    for (; b < v->count; a++)
+    for (size_t i = a; b < v->count; i++)
     {
-        target_addr = (char *)v->data + (a * v->item_size);
+        target_addr = (char *)v->data + (i * v->item_size);
         b += 1;
         src_addr = (char *)v->data + (b * v->item_size);
         memmove(target_addr, src_addr, v->item_size);
     }
     v->count -= r;
+    return 0;
 }
 
 int VectorValueExists(Vector *v, const void *value, int string)
