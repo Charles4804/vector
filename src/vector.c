@@ -62,7 +62,7 @@ void VectorPopFast(Vector *v, size_t index)
 {
     char *target_addr = (char *)v->data + (v->item_size * index);
     char *src_addr = (char *)v->data + (v->item_size * (index + 1));
-    memmove(target_addr, src_addr, v->item_size * (v->count - index));
+    memmove(target_addr, src_addr, v->item_size * (v->count - index - 1));
     v->count--;
 }
 
@@ -469,6 +469,11 @@ size_t VectorGetIndexByValue(Vector *v, const void *value, int string)
         return -1;
     }
     return -1;
+}
+
+void VectorClear(Vector *v)
+{
+    v->count = 0;
 }
 
 void VectorFree(Vector *v)

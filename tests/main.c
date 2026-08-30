@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
 void Test() {
   Vector *v = (Vector *)malloc(sizeof(Vector));
 
@@ -57,9 +58,25 @@ void Test2() {
   printf("0 : %d 1:%d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1));
   VectorFree(v);
   free(v);
-}
+} */
 
-int main(int argc, const char *argv[]) {
-  Test2();
-  return 0;
+int main(int argc, const char *argv[]) 
+{
+    Vector *v = (Vector *)malloc(sizeof(Vector));
+    VectorNew(v, 4);
+    VectorPush(v, &(int){3432423});
+    VectorPush(v, &(int){57922});
+    VectorPush(v, &(int){5});
+    if (argc > 1)
+    {
+        VectorPop(v, 0);
+        return 0;
+    }
+    else
+    {
+        VectorPopFast(v, 0);
+    }
+    
+    VectorFree(v);
+    return 0;
 }
