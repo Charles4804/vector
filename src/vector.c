@@ -80,7 +80,7 @@ int VectorPopByValue(Vector *v, const void *value, int p)
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, value))
+            if (!strcmp(*target_addr, *(char **)value))
             {
                 dest = (char *)v->data + (v->item_size * i);
                 src = (char *)v->data + (v->item_size * (i + 1));
@@ -198,15 +198,13 @@ int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
 
 int VectorValueExists(Vector *v, const void *value, int p)
 {
-    char *src;
-    char *dest;
     if (p)
     {
         char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, value))
+            if (!strcmp(*target_addr, *(char **)value))
             {
                 return 0;
             }
@@ -297,20 +295,22 @@ int VectorAddRange(Vector *dest, Vector *v)
 
 void *VectorGet(Vector *v, size_t index)
 {
+    if (index >= v->count)
+    {
+        return nullptr;
+    }
     return (void *)((char *)v->data + (index * v->item_size));
 }
 
 void *VectorGetByValue(Vector *v, const void *value, int p)
 {
-    char *src;
-    char *dest;
     if (p)
     {
         char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, value))
+            if (!strcmp(*target_addr, *(char **)value))
             {
                 return (void *)((char *)v->data + (v->item_size * i));
             }
@@ -347,15 +347,13 @@ size_t VectorGetCapacity(Vector *v)
 
 size_t VectorGetIndexByValue(Vector *v, const void *value, int p)
 {
-    char *src;
-    char *dest;
     if (p)
     {
         char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, value))
+            if (!strcmp(*target_addr, *(char **)value))
             {
                 return i;
             }
