@@ -7,10 +7,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_INLINES_VISIBILITY_ON 1)
 
-add_library(Vector SHARED src/vector.c)
+add_library(Vector src/vector.c)
 
-target_compile_definitions(Vector PRIVATE WINDOWS_DLL)
+#target_compile_options(Vector PRIVATE -O3 -march=native)
 
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(Vector PRIVATE WINDOWS_DLL)
+endif()
 target_include_directories(Vector 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

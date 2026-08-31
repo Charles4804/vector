@@ -9,12 +9,16 @@
 //   --by Charles4804                     |||
 //   ---protected by MIT license          |||
 
-void VectorNew(Vector *v, size_t item_size)
+int VectorNew(Vector *v, size_t item_size)
 {
     v->item_size = item_size;
     v->count = 0;
     v->capacity = 2;
-    v->data = (void *)malloc(v->capacity * v->item_size);
+    if ((v->data = (void *)malloc(v->capacity * v->item_size)) == nullptr)
+    {
+        return 1;
+    }
+    return 0;
 }
 
 int VectorPush(Vector *v, const void *item)
@@ -37,18 +41,18 @@ int VectorPush(Vector *v, const void *item)
 
 int VectorPop(Vector *v, size_t index)
 {
-    if (index > v->count)
+    if (index >= v->count)
     {
         return 1;
     }
-    if (index == v->count)
+    if (index == (v->count - 1))
     {
         v->count--;
         return 0;
     }
     char *current;
     char *ahead;
-    for (size_t i = index; i < v->count; i++)
+    for (size_t i = index; i < v->count - 1; i++)
     {
         current = (char *)v->data + (i * v->item_size);
         ahead = (char *)v->data + ((i + 1) * v->item_size);
@@ -62,86 +66,48 @@ void VectorPopFast(Vector *v, size_t index)
 {
     char *target_addr = (char *)v->data + (v->item_size * index);
     char *src_addr = (char *)v->data + (v->item_size * (index + 1));
-    memmove(target_addr, src_addr, v->item_size * (v->count - index - 1));
+    memmove(target_addr, src_addr, v->item_size * ((v->count - (index + 1))));
     v->count--;
 }
 
-int VectorPopByValue(Vector *v, const void *value, int string)
+int VectorPopByValue(Vector *v, const void *value, int p)
 {
-    if (string)
+    char *src;
+    char *dest;
+    if (p)
     {
-        int found = 0;
-        char *target_addr;
-        char *ahead;
-        char *s1;
-        char *s2 = (char *)value;
+        char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
-            target_addr = (char *)v->data + (i * v->item_size);
+            target_addr = (char **)((char *)v->data + (v->item_size * i));
+            if (!strcmp(*target_addr, value))
+            {
+                dest = (char *)v->data + (v->item_size * i);
+                src = (char *)v->data + (v->item_size * (i + 1));
 
-            s1 = target_addr;
-            
-            while (!found && *s1 && (*s1 == *s2))
-            {
-                s1++;
-                s2++;
+                memmove(dest, src, v->item_size * (v->count - (i + 1))); // (v->count - i) - 1 = v->count - (i + 1)
+                v->count--;
+                return 0;
             }
-            if (!found && *s1 == '\0' && *s2 == '\0')
-            {
-                found = 1;
-                if (i == v->count)
-                {
-                    v->count--;
-                    break;
-                }
-                i = 0;
-            }
-            else if (found)
-            {
-                ahead = (char *)v->data + ((i + 1) * v->item_size);
-                memmove(target_addr, ahead, v->item_size);
-            }
-        }
-        if (!found)
-        {
-            return 1;
-        }
-        v->count--;
-        return 0;
+        }      
+        return 1;
     }
-    else 
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
     {
-        int found = 0;
-        char *ahead;
-        char *target_addr;
-        for (size_t i = 0; i < v->count; i++)
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!memcmp(target_addr, value, v->item_size))
         {
-            target_addr = (char *)v->data + (i * v->item_size);
-            
-            if (!found && memcmp(target_addr, value, v->item_size) == 0)
-            {
-                found = 1;
-                if (i == v->count)
-                {
-                    v->count--;
-                    break;
-                }
-                i = 0;
-            }
-            else if (found)
-            {
-                ahead = (char *)v->data + ((i + 1) * v->item_size);
-                memmove(target_addr, ahead, v->item_size);
-            }
+            dest = (char *)v->data + (v->item_size * i);
+            src = (char *)v->data + (v->item_size * (i + 1));
+            memmove(dest, src, v->item_size * (v->count - (i + 1)));
+            v->count--;
+            return 0;
         }
-        if (!found)
-        {
-            return 1;
-        }
-        v->count--;
-        return 0;
     }
+    return 1;
 }
+
 
 int VectorPopUnsafe(Vector *v, size_t index)
 {
@@ -154,7 +120,7 @@ int VectorPopUnsafe(Vector *v, size_t index)
     { 
         char *current;
         char *ahead;
-        for (size_t i = index; i < v->count; i++)
+        for (size_t i = index; i < v->count - 1; i++)
         {
             current = (char *)v->data + (i * v->item_size);
             ahead = (char *)v->data + ((i + 1) * v->item_size);
@@ -167,6 +133,7 @@ int VectorPopUnsafe(Vector *v, size_t index)
    
 }
 
+
 int VectorPopRange(Vector *v ,size_t a, size_t b)
 {
     if (a < 0 || a > v->capacity || b < 0 || b > v->count || a > b || b < a)
@@ -174,18 +141,18 @@ int VectorPopRange(Vector *v ,size_t a, size_t b)
         return 1;
     }
     size_t r = (b - a) + 1;
-
     if (b == v->count)
     {
         v->count -= r;
+        return 0;
     }
 
     char *target_addr;
     char *src_addr;
 
-    for (; b < v->count; a++)
+    for (size_t q = a; b < v->count; q++)
     {
-        target_addr = (char *)v->data + (a * v->item_size);
+        target_addr = (char *)v->data + (q * v->item_size);
         b += 1;
         src_addr = (char *)v->data + (b * v->item_size);
         memmove(target_addr, src_addr, v->item_size);
@@ -196,28 +163,13 @@ int VectorPopRange(Vector *v ,size_t a, size_t b)
 
 void VectorPopRangeFast(Vector *v, size_t a, size_t b)
 {
-    size_t r = (b - a) + 1;
     size_t s = v->count - (b + 1);
     char *target_addr = (char *)v->data + (v->item_size * a);
     char *src_addr = (char *)v->data + (v->item_size * (b + 1));
 
     memmove(target_addr, src_addr, v->item_size * s);
     
-    if (s < r)
-    {
-        v->count -= r - s;
-        return;
-    }
-    if (s == r)
-    {
-        v->count -= s;
-        return;
-    }
-    if (s > r)
-    {
-        v->count -= s - r;
-        return;
-    }
+    v->count -= (b - a) + 1;
 }
 
 int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
@@ -227,6 +179,7 @@ int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
     if (b == v->count)
     {
         v->count -= r;
+        return 0;
     }
 
     char *target_addr;
@@ -243,46 +196,33 @@ int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
     return 0;
 }
 
-int VectorValueExists(Vector *v, const void *value, int string)
+int VectorValueExists(Vector *v, const void *value, int p)
 {
-    if (string)
+    char *src;
+    char *dest;
+    if (p)
     {
+        char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
-            char *target_addr = (char *)v->data + (i * v->item_size);
-            char *ahead;
-
-            char *s1 = target_addr;
-            char *s2 = (char *)value;
-            
-            while (*s1 && (*s1 == *s2))
-            {
-                s1++;
-                s2++;
-            }
-            if (*s1 == '\0' && *s2 == '\0')
+            target_addr = (char **)((char *)v->data + (v->item_size * i));
+            if (!strcmp(*target_addr, value))
             {
                 return 0;
             }
-        }
+        }      
         return 1;
     }
-    else 
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
     {
-        char *ahead;
-        char *target_addr;
-        for (size_t i = 0; i < v->count; i++)
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!memcmp(target_addr, value, v->item_size))
         {
-            target_addr = (char *)v->data + (i * v->item_size);
-            
-            if (memcmp(target_addr, value, v->item_size) == 0)
-            {
-                return 0;            
-            }
+            return 0;
         }
-        return 1;
     }
-
+    return 1;
 }
 
 int VectorInsert(Vector *v, size_t index, const void *value)
@@ -291,7 +231,7 @@ int VectorInsert(Vector *v, size_t index, const void *value)
     {
         return 1;
     }
-    if (v->count == v->capacity)
+    if ((v->count + 1) >= v->capacity)
     {
         void *tmp;
         v->capacity *= 2;
@@ -301,22 +241,18 @@ int VectorInsert(Vector *v, size_t index, const void *value)
         }
         v->data = tmp;
     }
-    char *current;
-    char *ahead;
-    for (size_t i = v->count + 1; i > index; i--)
-    {
-        current = (char *)v->data + (i * v->item_size);
-        ahead = (char *)v->data + ((i - 1) * v->item_size);
-        memmove(current, ahead, v->item_size);
-    }
-    memcpy(ahead, value, v->item_size);
+    char *target_addr = (char *)v->data + (v->item_size * (index + 1));
+    char *src_addr = (char *)v->data + (v->item_size * index);
+    memmove(target_addr, src_addr, v->item_size * (v->count - index));
+    memcpy(src_addr, value, v->item_size);
+
     v->count++;
     return 0;    
 }
 
 int VectorInsertUnsafe(Vector *v, size_t index, const void *value)
 {
-    if (v->count == v->capacity)
+    if ((v->count + 1) >= v->capacity)
     {
         void *tmp;
         v->capacity *= 2;
@@ -326,43 +262,36 @@ int VectorInsertUnsafe(Vector *v, size_t index, const void *value)
         }
         v->data = tmp;
     }
-    char *current;
-    char *ahead;
-    for (size_t i = v->count + 1; i > index; i--)
-    {
-        current = (char *)v->data + (i * v->item_size);
-        ahead = (char *)v->data + ((i - 1) * v->item_size);
-        memmove(current, ahead, v->item_size);
-    }
-    memcpy(ahead, value, v->item_size);
+    char *target_addr = (char *)v->data + (v->item_size * (index + 1));
+    char *src_addr = (char *)v->data + (v->item_size * index);
+    memmove(target_addr, src_addr, v->item_size * (v->count - index));
+    memcpy(src_addr, value, v->item_size);
+
     v->count++;
     return 0;    
 }
 
 int VectorAddRange(Vector *dest, Vector *v)
 {
-    char *target_addr;
-    char *dest_addr;
-    for (size_t i = 0; i < v->count; i++)
-    {   
-        target_addr = (char *)v->data + (i * v->item_size);
-        if (dest->count == dest->capacity)
+    size_t x = dest->count + v->count;
+    if (x >= dest->capacity)
+    {
+        size_t nc = dest->capacity;
+        while (nc < x)
         {
-            void *tmp;
-            if (dest->count == dest->capacity)
-            {
-                void *tmp;
-                v->capacity *= 2;
-                if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
-                {
-                    return 1;
-                }
-                v->data = tmp;
-            }
-            dest_addr = (dest->data) + (dest->count * dest->item_size);
-            memcpy(dest_addr, target_addr, dest->item_size);
+            nc <<= 1;
         }
+        dest->capacity = nc;
+        void *tmp;
+        if ((tmp = realloc(dest->data, dest->capacity * dest->item_size)) == nullptr)
+        {
+            return 1;
+        }
+        dest->data = tmp;
     }
+    char *target_addr = (char *)dest->data + (dest->item_size * dest->count);
+    memcpy(target_addr, v->data, v->item_size * v->count);
+    dest->count += v->count;
     return 0;
 }
 
@@ -371,46 +300,33 @@ void *VectorGet(Vector *v, size_t index)
     return (void *)((char *)v->data + (index * v->item_size));
 }
 
-
-void *VectorGetByValue(Vector *v, const void *value, int string)
+void *VectorGetByValue(Vector *v, const void *value, int p)
 {
-    if (string)
+    char *src;
+    char *dest;
+    if (p)
     {
-        char *target_addr;
-        char *s1;
-        char *s2;
+        char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
-            target_addr = (char *)v->data + (i * v->item_size);
-            s1 = target_addr;
-            s2 = (char *)value;
-            
-            while (*s1 && (*s1 == *s2))
+            target_addr = (char **)((char *)v->data + (v->item_size * i));
+            if (!strcmp(*target_addr, value))
             {
-                s1++;
-                s2++;
+                return (void *)((char *)v->data + (v->item_size * i));
             }
-
-            if (*s1 == '\0' && *s2 == '\0')
-            {
-                return (void *)target_addr;
-            }
-        }
-        return nullptr;   
-    }   
-    else
-    {
-        char *target_addr;
-        for (size_t i = 0; i < v->count; i++)
-        {
-            target_addr= (char *)v->data + (i * v->item_size);
-            if (memcmp(target_addr, value, v->item_size) == 0)
-            {
-                return (void *)target_addr;
-            }
-        }
+        }      
         return nullptr;
     }
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
+    {
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!memcmp(target_addr, value, v->item_size))
+        {
+            return (void *)((char *)v->data + (v->item_size * i));     
+        }
+    }
+    return nullptr;
 }
 
 void VectorReplace(Vector *v, size_t index, const void *value)
@@ -429,44 +345,31 @@ size_t VectorGetCapacity(Vector *v)
     return v->capacity;
 }
 
-size_t VectorGetIndexByValue(Vector *v, const void *value, int string)
+size_t VectorGetIndexByValue(Vector *v, const void *value, int p)
 {
-    if (string)
+    char *src;
+    char *dest;
+    if (p)
     {
-        char *target_addr;
-        char *s1;
-        char *s2 = (char *)value;
+        char **target_addr;
         for (size_t i = 0; i < v->count; i++)
         {
-            target_addr = (char *)v->data + (i * v->item_size);
-            s1 = target_addr;
-
-            while (*s1 && (*s1 == *s2))
-            {
-                s1++;
-                s2++;
-            }
-
-            if (*s1 == '\0' && *s2 == '\0')
+            target_addr = (char **)((char *)v->data + (v->item_size * i));
+            if (!strcmp(*target_addr, value))
             {
                 return i;
             }
-        }
+        }      
         return -1;
-    }   
-    else
+    }
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
     {
-        char *target_addr;
-        for (size_t i = 0; i < v->count; i++)
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!memcmp(target_addr, value, v->item_size))
         {
-            target_addr = (char *)v->data + (i * v->item_size);
-
-            if (memcmp(target_addr, value, v->item_size))
-            {
-                return i;
-            }
+            return i;     
         }
-        return -1;
     }
     return -1;
 }

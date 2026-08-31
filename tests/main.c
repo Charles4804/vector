@@ -1,8 +1,8 @@
 #include "Vector/vector.h"
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 
-/*
 void Test() {
   Vector *v = (Vector *)malloc(sizeof(Vector));
 
@@ -58,25 +58,36 @@ void Test2() {
   printf("0 : %d 1:%d\n", *(int *)VectorGet(v, 0), *(int *)VectorGet(v, 1));
   VectorFree(v);
   free(v);
-} */
+}
 
 int main(int argc, const char *argv[]) 
 {
+    /*
     Vector *v = (Vector *)malloc(sizeof(Vector));
     VectorNew(v, 4);
-    VectorPush(v, &(int){3432423});
-    VectorPush(v, &(int){57922});
-    VectorPush(v, &(int){5});
+    for (int i = 0; i < 1000000; i++)
+    {
+        VectorPush(v, &i);
+    }
+
+    clock_t start = clock();
+
     if (argc > 1)
     {
         VectorPop(v, 0);
-        return 0;
     }
     else
     {
         VectorPopFast(v, 0);
     }
+
+    clock_t end = clock();
+    double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Pop execution time: %f seconds\n", time_taken);
     
     VectorFree(v);
+    free(v);*/
+    Test();
+
     return 0;
 }
