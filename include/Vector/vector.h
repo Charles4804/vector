@@ -65,13 +65,25 @@ VECTOR_API
 int VectorAddRange(Vector *dest ,Vector *v);
 
 VECTOR_API
+int VectorEnsureCapacity(Vector *v, size_t capacity);
+
+VECTOR_API
 void *VectorGet(Vector *v, size_t index);
 
 VECTOR_API
 void *VectorGetByValue(Vector *v, const void *value, int string); 
 
 VECTOR_API
+void *VectorGetArray(Vector *v);
+
+VECTOR_API
 void VectorReplace(Vector *v, size_t index, const void *value);
+
+VECTOR_API
+int VectorCopyTo(Vector *v, size_t index, void *array);
+
+VECTOR_API
+void VectorCopy(Vector *v, void *array);
 
 VECTOR_API 
 size_t VectorGetCount(Vector *v); 
@@ -81,9 +93,6 @@ size_t VectorGetCapacity(Vector *v);
 
 VECTOR_API
 size_t VectorGetIndexByValue(Vector *v, const void *value, int string);
-
-VECTOR_API
-void *VectorGetArray(Vector *v);
 
 VECTOR_API
 void VectorClear(Vector *v);

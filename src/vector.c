@@ -80,7 +80,7 @@ int VectorPopByValue(Vector *v, const void *value, int p)
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, *(char **)value))
+            if (!strcmp(*target_addr, (char *)value))
             {
                 dest = (char *)v->data + (v->item_size * i);
                 src = (char *)v->data + (v->item_size * (i + 1));
@@ -204,7 +204,7 @@ int VectorValueExists(Vector *v, const void *value, int p)
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, *(char **)value))
+            if (!strcmp(*target_addr, (char *)value))
             {
                 return 0;
             }
@@ -293,6 +293,26 @@ int VectorAddRange(Vector *dest, Vector *v)
     return 0;
 }
 
+int VectorEnsureCapacity(Vector *v, size_t capacity)
+{
+    if (v->capacity < capacity)
+    {
+        size_t nc = v->capacity;
+        while (nc < capacity)
+        {
+            nc <<= 1;
+        }
+        v->capacity = nc;
+        void *tmp;
+        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
+        {
+            return 1;
+        }
+        v->data = tmp;
+    }
+    return 0;
+}
+
 void *VectorGet(Vector *v, size_t index)
 {
     if (index >= v->count)
@@ -329,10 +349,31 @@ void *VectorGetByValue(Vector *v, const void *value, int p)
     return nullptr;
 }
 
+void *VectorGetArray(Vector *v)
+{
+    return v->data;
+}
+
 void VectorReplace(Vector *v, size_t index, const void *value)
 {
     char *target_addr = (char *)v->data + (index * v->item_size);
     memcpy(target_addr, value, v->item_size);
+}
+
+int VectorCopyTo(Vector *v, size_t index, void *array)
+{
+    if (index >= v->count)
+    {
+        return 1;
+    }
+    char *target_addr = (char *)v->data + (v->item_size * index);
+    memcpy(array, target_addr, v->item_size * (v->count - (index + 1)));
+    return 0;
+}
+
+void VectorCopy(Vector *v, void *array)
+{
+    memcpy(array, v->data, v->item_size * v->count);
 }
 
 size_t VectorGetCount(Vector *v)
@@ -353,7 +394,7 @@ size_t VectorGetIndexByValue(Vector *v, const void *value, int p)
         for (size_t i = 0; i < v->count; i++)
         {
             target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, *(char **)value))
+            if (!strcmp(*target_addr, (char *)value))
             {
                 return i;
             }
@@ -370,11 +411,6 @@ size_t VectorGetIndexByValue(Vector *v, const void *value, int p)
         }
     }
     return -1;
-}
-
-void *VectorGetArray(Vector *v)
-{
-    return v->data;
 }
 
 void VectorClear(Vector *v)

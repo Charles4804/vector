@@ -96,6 +96,8 @@ int main(int argc, const char *argv[])
     char *apple = "Apple";
     char *banana = "Banana";
     char *mango = "Mango";
+        
+    VectorEnsureCapacity(v, 8);
 
     VectorPush(v, &apple);
     VectorPush(v, &banana);
@@ -103,13 +105,15 @@ int main(int argc, const char *argv[])
 
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s 2 : %s\n", *(char **)VectorGet(v, 0), *(char **)VectorGet(v, 1), *(char **)VectorGet(v, 2));
-    printf("0 : %d 1 : %d 2 : %d\n", VectorValueExists(v, &(char*){"Apple"}, 1), VectorValueExists(v, &(char*){"Banana"}, 1), VectorValueExists(v, &(char*){"Mango"}, 1));
+    printf("0 : %d 1 : %d 2 : %d\n", VectorValueExists(v, (char*){"Apple"}, 1), VectorValueExists(v, (char*){"Banana"}, 1), VectorValueExists(v, (char*){"Mango"}, 1));
     
     VectorPopByValue(v, &(char *){"Banana"}, 1);
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s\n", *(char **)VectorGet(v, 0), *(char **)VectorGet(v, 1));
-    printf("apple : %zu mango : %zu\n", VectorGetIndexByValue(v, &(char*){"Apple"}, 1), VectorGetIndexByValue(v, &(char*){"Mango"}, 1));
-    char **fruits = (char **)VectorGetArray(v);
+    printf("apple : %zu mango : %zu\n", VectorGetIndexByValue(v, (char*){"Apple"}, 1), VectorGetIndexByValue(v, (char*){"Mango"}, 1));
+    //char **fruits = (char **)VectorGetArray(v);
+    char **fruits = malloc(32);
+    VectorCopyTo(v, 1, fruits);
     printf("%s %s\n", fruits[0], fruits[1]);
     VectorFree(v);
 
