@@ -29,6 +29,14 @@ This library provides a dynamic array implementation for C.
 
 ## Installation
 Download the latest release from the [Releases](https://github.com/Charles4804/vector/releases) section.
+And then extract the zip file. 
+> [!CAUTION]
+> Version 1.1.4 down to the first version does not have any optimization, and has multiple critical bugs
+
+**Linux**
+---
+Put the **include** folder to /usr/local/include/Vector/ _Needs Elevated Privileges_
+And then put the lib folder's contents to /usr/local/lib/
 
 ## Implementation
 To use the library, add the installation path to your system's environment variables (PATH).
