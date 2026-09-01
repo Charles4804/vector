@@ -141,7 +141,7 @@ int VectorPopRange(Vector *v ,size_t a, size_t b)
         return 1;
     }
     size_t r = (b - a) + 1;
-    if (b == v->count)
+    if (b == (v->count - 1))
     {
         v->count -= r;
         return 0;
@@ -176,7 +176,7 @@ int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
 {
     size_t r = (b - a) + 1;
 
-    if (b == v->count)
+    if (b == (v->count - 1))
     {
         v->count -= r;
         return 0;
@@ -370,6 +370,11 @@ size_t VectorGetIndexByValue(Vector *v, const void *value, int p)
         }
     }
     return -1;
+}
+
+void *VectorGetArray(Vector *v)
+{
+    return v->data;
 }
 
 void VectorClear(Vector *v)

@@ -83,6 +83,9 @@ VECTOR_API
 size_t VectorGetIndexByValue(Vector *v, const void *value, int string);
 
 VECTOR_API
+void *VectorGetArray(Vector *v);
+
+VECTOR_API
 void VectorClear(Vector *v);
 
 VECTOR_API

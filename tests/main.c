@@ -109,7 +109,8 @@ int main(int argc, const char *argv[])
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s\n", *(char **)VectorGet(v, 0), *(char **)VectorGet(v, 1));
     printf("apple : %zu mango : %zu\n", VectorGetIndexByValue(v, &(char*){"Apple"}, 1), VectorGetIndexByValue(v, &(char*){"Mango"}, 1));
-
+    char **fruits = (char **)VectorGetArray(v);
+    printf("%s %s\n", fruits[0], fruits[1]);
     VectorFree(v);
 
     Test();
