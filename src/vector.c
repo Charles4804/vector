@@ -367,7 +367,7 @@ int VectorCopyTo(Vector *v, size_t index, void *array)
         return 1;
     }
     char *target_addr = (char *)v->data + (v->item_size * index);
-    memcpy(array, target_addr, v->item_size * (v->count - (index + 1)));
+    memcpy(array, target_addr, v->item_size * (v->count - index));
     return 0;
 }
 
