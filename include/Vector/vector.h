@@ -29,37 +29,25 @@ VECTOR_API
 int VectorNew(Vector *v, size_t item_size);
 
 VECTOR_API
-int VectorPush(Vector *v, const void *item);
-
-__attribute__((deprecated("Use VectorPopFast"))) VECTOR_API 
-int VectorPop(Vector *v, size_t index);
+int VectorAdd(Vector *v, const void *item);
 
 VECTOR_API
-void VectorPopFast(Vector *v, size_t index);
+void VectorRemoveAt(Vector *v, size_t index);
 
 VECTOR_API
-int VectorPopByValue(Vector *v, const void *value, int string);
-
-__attribute__((deprecated("Use VectorPopFast"))) VECTOR_API
-int VectorPopUnsafe(Vector *v, size_t index);
-
-__attribute__((deprecated("Use VectorPopRangeFast"))) VECTOR_API 
-int VectorPopRange(Vector *v, size_t a, size_t b);
+int VectorRemove(Vector *v, const void *value, int string);
 
 VECTOR_API
-void VectorPopRangeFast(Vector *v, size_t a, size_t b);
-
-__attribute__((deprecated("Use VectorPopRangeFast")))VECTOR_API
-int VectorPopRangeUnsafe(Vector *v, size_t a, size_t b);
+void VectorRemoveRange(Vector *v, size_t a, size_t b);
 
 VECTOR_API
-int VectorValueExists(Vector *v, const void *value, int string);
+int VectorContains(Vector *v, const void *value, int string);
 
 VECTOR_API
 int VectorInsert(Vector *v, size_t index, const void *value);
 
 VECTOR_API
-int VectorInsertUnsafe(Vector *v, size_t index, const void *value);
+int _VectorInsert(Vector *v, size_t index, const void *value);
 
 VECTOR_API
 int VectorAddRange(Vector *dest ,Vector *v);
@@ -68,13 +56,13 @@ VECTOR_API
 int VectorEnsureCapacity(Vector *v, size_t capacity);
 
 VECTOR_API
-void *VectorGet(Vector *v, size_t index);
+void *VectorGetAt(Vector *v, size_t index);
 
 VECTOR_API
-void *VectorGetByValue(Vector *v, const void *value, int string); 
+void *VectorGet(Vector *v, const void *value, int p); 
 
 VECTOR_API
-void *VectorGetArray(Vector *v);
+void *VectorGetData(Vector *v);
 
 VECTOR_API
 void VectorReplace(Vector *v, size_t index, const void *value);
@@ -85,14 +73,8 @@ int VectorCopyTo(Vector *v, size_t index, void *array);
 VECTOR_API
 void VectorCopy(Vector *v, void *array);
 
-VECTOR_API 
-size_t VectorGetCount(Vector *v); 
-
 VECTOR_API
-size_t VectorGetCapacity(Vector *v); 
-
-VECTOR_API
-size_t VectorGetIndexByValue(Vector *v, const void *value, int string);
+size_t VectorGetIndex(Vector *v, const void *value, int string);
 
 VECTOR_API
 void VectorClear(Vector *v);

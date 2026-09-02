@@ -21,7 +21,7 @@ int VectorNew(Vector *v, size_t item_size)
     return 0;
 }
 
-int VectorPush(Vector *v, const void *item)
+int VectorAdd(Vector *v, const void *item)
 {
     if (v->count == v->capacity)
     {
@@ -39,30 +39,7 @@ int VectorPush(Vector *v, const void *item)
     return 0;
 }
 
-int VectorPop(Vector *v, size_t index)
-{
-    if (index >= v->count)
-    {
-        return 1;
-    }
-    if (index == (v->count - 1))
-    {
-        v->count--;
-        return 0;
-    }
-    char *current;
-    char *ahead;
-    for (size_t i = index; i < v->count - 1; i++)
-    {
-        current = (char *)v->data + (i * v->item_size);
-        ahead = (char *)v->data + ((i + 1) * v->item_size);
-        memmove(current, ahead, v->item_size);
-    }
-    v->count--;
-    return 0;
-}
-
-void VectorPopFast(Vector *v, size_t index)
+void VectorRemoveAt(Vector *v, size_t index)
 {
     char *target_addr = (char *)v->data + (v->item_size * index);
     char *src_addr = (char *)v->data + (v->item_size * (index + 1));
@@ -70,7 +47,7 @@ void VectorPopFast(Vector *v, size_t index)
     v->count--;
 }
 
-int VectorPopByValue(Vector *v, const void *value, int p)
+int VectorRemove(Vector *v, const void *value, int p)
 {
     char *src;
     char *dest;
@@ -108,60 +85,7 @@ int VectorPopByValue(Vector *v, const void *value, int p)
     return 1;
 }
 
-
-int VectorPopUnsafe(Vector *v, size_t index)
-{
-    if (index == v->count)
-    {
-        v->count--;
-        return 0;
-    }
-    else
-    { 
-        char *current;
-        char *ahead;
-        for (size_t i = index; i < v->count - 1; i++)
-        {
-            current = (char *)v->data + (i * v->item_size);
-            ahead = (char *)v->data + ((i + 1) * v->item_size);
-            memmove(current, ahead, v->item_size);
-        }
-        v->count--;
-        return 0;
-    }
-    return 1;
-   
-}
-
-
-int VectorPopRange(Vector *v ,size_t a, size_t b)
-{
-    if (a < 0 || a > v->capacity || b < 0 || b > v->count || a > b || b < a)
-    {
-        return 1;
-    }
-    size_t r = (b - a) + 1;
-    if (b == (v->count - 1))
-    {
-        v->count -= r;
-        return 0;
-    }
-
-    char *target_addr;
-    char *src_addr;
-
-    for (size_t q = a; b < v->count; q++)
-    {
-        target_addr = (char *)v->data + (q * v->item_size);
-        b += 1;
-        src_addr = (char *)v->data + (b * v->item_size);
-        memmove(target_addr, src_addr, v->item_size);
-    }
-    v->count -= r;
-    return 0;
-}
-
-void VectorPopRangeFast(Vector *v, size_t a, size_t b)
+void VectorRemoveRange(Vector *v, size_t a, size_t b)
 {
     size_t s = v->count - (b + 1);
     char *target_addr = (char *)v->data + (v->item_size * a);
@@ -172,31 +96,7 @@ void VectorPopRangeFast(Vector *v, size_t a, size_t b)
     v->count -= (b - a) + 1;
 }
 
-int VectorPopRangeUnsafe(Vector *v ,size_t a, size_t b)
-{
-    size_t r = (b - a) + 1;
-
-    if (b == (v->count - 1))
-    {
-        v->count -= r;
-        return 0;
-    }
-
-    char *target_addr;
-    char *src_addr;
-
-    for (size_t i = a; b < v->count; i++)
-    {
-        target_addr = (char *)v->data + (i * v->item_size);
-        b += 1;
-        src_addr = (char *)v->data + (b * v->item_size);
-        memmove(target_addr, src_addr, v->item_size);
-    }
-    v->count -= r;
-    return 0;
-}
-
-int VectorValueExists(Vector *v, const void *value, int p)
+int VectorContains(Vector *v, const void *value, int p)
 {
     if (p)
     {
@@ -248,7 +148,7 @@ int VectorInsert(Vector *v, size_t index, const void *value)
     return 0;    
 }
 
-int VectorInsertUnsafe(Vector *v, size_t index, const void *value)
+int _VectorInsert(Vector *v, size_t index, const void *value)
 {
     if ((v->count + 1) >= v->capacity)
     {
@@ -274,12 +174,10 @@ int VectorAddRange(Vector *dest, Vector *v)
     size_t x = dest->count + v->count;
     if (x >= dest->capacity)
     {
-        size_t nc = dest->capacity;
-        while (nc < x)
+        while (dest->capacity < x)
         {
-            nc <<= 1;
+            dest->capacity <<= 1;
         }
-        dest->capacity = nc;
         void *tmp;
         if ((tmp = realloc(dest->data, dest->capacity * dest->item_size)) == nullptr)
         {
@@ -297,12 +195,10 @@ int VectorEnsureCapacity(Vector *v, size_t capacity)
 {
     if (v->capacity < capacity)
     {
-        size_t nc = v->capacity;
-        while (nc < capacity)
+        while (v->capacity < capacity)
         {
-            nc <<= 1;
+            v->capacity <<= 1;
         }
-        v->capacity = nc;
         void *tmp;
         if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
         {
@@ -313,7 +209,7 @@ int VectorEnsureCapacity(Vector *v, size_t capacity)
     return 0;
 }
 
-void *VectorGet(Vector *v, size_t index)
+void *VectorGetAt(Vector *v, size_t index)
 {
     if (index >= v->count)
     {
@@ -322,7 +218,7 @@ void *VectorGet(Vector *v, size_t index)
     return (void *)((char *)v->data + (index * v->item_size));
 }
 
-void *VectorGetByValue(Vector *v, const void *value, int p)
+void *VectorGet(Vector *v, const void *value, int p)
 {
     if (p)
     {
@@ -349,7 +245,7 @@ void *VectorGetByValue(Vector *v, const void *value, int p)
     return nullptr;
 }
 
-void *VectorGetArray(Vector *v)
+void *VectorGetData(Vector *v)
 {
     return v->data;
 }
@@ -376,17 +272,7 @@ void VectorCopy(Vector *v, void *array)
     memcpy(array, v->data, v->item_size * v->count);
 }
 
-size_t VectorGetCount(Vector *v)
-{
-    return v->count;
-}
-
-size_t VectorGetCapacity(Vector *v)
-{
-    return v->capacity;
-}
-
-size_t VectorGetIndexByValue(Vector *v, const void *value, int p)
+size_t VectorGetIndex(Vector *v, const void *value, int p)
 {
     if (p)
     {
