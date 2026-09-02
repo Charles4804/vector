@@ -30,8 +30,6 @@ This library provides a dynamic array implementation for C.
 ## Installation
 Download the latest release from the [Releases](https://github.com/Charles4804/vector/releases) section.
 And then extract the zip file. 
-> [!CAUTION]
-> Version 1.1.4 down to the first version does not have any optimization, and has multiple critical bugs
 
 **Linux**
 ---
