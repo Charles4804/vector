@@ -169,7 +169,7 @@ int _VectorInsert(Vector *v, size_t index, const void *value)
     return 0;    
 }
 
-int VectorAddRange(Vector *dest, Vector *v)
+int VectorAddRange(Vector *restrict dest, Vector *restrict v)
 {
     size_t x = dest->count + v->count;
     if (x >= dest->capacity)
@@ -256,7 +256,7 @@ void VectorReplace(Vector *v, size_t index, const void *value)
     memcpy(target_addr, value, v->item_size);
 }
 
-int VectorCopyTo(Vector *v, size_t index, void *array)
+int VectorCopyTo(Vector *restrict v, size_t index, void *restrict array)
 {
     if (index >= v->count)
     {
@@ -267,7 +267,7 @@ int VectorCopyTo(Vector *v, size_t index, void *array)
     return 0;
 }
 
-void VectorCopy(Vector *v, void *array)
+void VectorCopy(Vector *restrict v, void *restrict array)
 {
     memcpy(array, v->data, v->item_size * v->count);
 }

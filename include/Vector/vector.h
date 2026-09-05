@@ -19,7 +19,7 @@
 
 typedef struct
 {
-    void *data;
+    void *restrict data;
     size_t count;
     size_t capacity;
     size_t item_size;
@@ -50,7 +50,7 @@ VECTOR_API
 int _VectorInsert(Vector *v, size_t index, const void *value);
 
 VECTOR_API
-int VectorAddRange(Vector *dest ,Vector *v);
+int VectorAddRange(Vector *restrict dest ,Vector *restrict v);
 
 VECTOR_API
 int VectorEnsureCapacity(Vector *v, size_t capacity);
@@ -68,10 +68,10 @@ VECTOR_API
 void VectorReplace(Vector *v, size_t index, const void *value);
 
 VECTOR_API
-int VectorCopyTo(Vector *v, size_t index, void *array);
+int VectorCopyTo(Vector *restrict v, size_t index, void *restrict array);
 
 VECTOR_API
-void VectorCopy(Vector *v, void *array);
+void VectorCopy(Vector *restrict v, void *restrict array);
 
 VECTOR_API
 size_t VectorGetIndex(Vector *v, const void *value, int string);
