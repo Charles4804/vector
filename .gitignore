@@ -30,6 +30,7 @@ _deps/
 *.exe
 *.out
 *.app
+*.asm
 pack
 
 tests/

@@ -16,16 +16,16 @@ void Test(Vector *vv)
     printf("%zu, %zu\n", v->count, v->capacity);
     printf("0: %d, 1 : %d, 2 : %d\n", *(int *)VectorGetAt(v, 0), *(int *)VectorGetAt(v, 1), *(int *)VectorGetAt(v, 2));
     printf("value :: 0 : %d 1 : %d 2 : %d\n",
-         *(int *)VectorGet(v, &(int){2}, 0),
-         *(int *)VectorGet(v, &(int){64242342}, 0),
-         *(int *)VectorGet(v, &(int){2342934}, 0));
+         *(int *)VectorGet(v, &(int){2}),
+         *(int *)VectorGet(v, &(int){64242342}),
+         *(int *)VectorGet(v, &(int){2342934}));
     VectorRemoveAt(v, 0);
     VectorRemoveAt(v, 0);
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0: %d\n", *(int *)VectorGetAt(v, 0));
-    printf("value 132 exists : %d\n", VectorContains(v, &(int){132}, 0));
+    printf("value 132 exists : %d\n", VectorContains(v, &(int){132}));
     printf("value 2342934 exists : %d\n",
-         VectorContains(v, &(int){2342934}, 0));
+         VectorContains(v, &(int){2342934}));
     VectorReplace(v, 0, &(int){243});
     printf("0: %d\n", *(int *)VectorGetAt(v, 0));
     printf("error code : %d\n", VectorInsert(v, 0, &(int){67}));
@@ -35,7 +35,7 @@ void Test(Vector *vv)
     printf("0: %d, 1: %d 2: %d\n", *(int *)VectorGetAt(v, 0),
          *(int *)VectorGetAt(v, 1), *(int *)VectorGetAt(v, 2));
 
-    VectorRemove(v, &(int){243}, 0);
+    VectorRemove(v, &(int){243});
     printf("0 : %d, 1 : %d\n", *(int *)VectorGetAt(v, 0), *(int*)VectorGetAt(v, 1));
     VectorFree(v);
     free(v);
@@ -85,31 +85,6 @@ void Test2()
 
 int main(int argc, const char *argv[]) 
 {
-    /*
-    Vector *v = (Vector *)malloc(sizeof(Vector));
-    VectorNew(v, 4);
-    for (int i = 0; i < 100000000; i++)
-    {
-        VectorAdd(v, &i);
-    }
-
-    clock_t start = clock();
-
-    if (argc > 1)
-    {
-        VectorRemoveAt(v, 0);
-    }
-    else
-    {
-        VectorRemoveAtFast(v, 0);
-    }
-
-    clock_t end = clock();
-    double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Pop execution time: %f seconds\n", time_taken);
-    
-    VectorFree(v);
-    */
     Vector *v = (Vector *)malloc(sizeof(Vector));
     VectorNew(v, sizeof(char *));
     
@@ -125,20 +100,21 @@ int main(int argc, const char *argv[])
 
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s 2 : %s\n", *(char **)VectorGetAt(v, 0), *(char **)VectorGetAt(v, 1), *(char **)VectorGetAt(v, 2));
-    printf("0 : %d 1 : %d 2 : %d\n", VectorContains(v, (char*){"Apple"}, 1), VectorContains(v, (char*){"Banana"}, 1), VectorContains(v, (char*){"Mango"}, 1));
+    printf("0 : %d 1 : %d 2 : %d\n", VectorContains(v, (char*){"Apple"}), VectorContains(v, (char*){"Banana"}), VectorContains(v, (char*){"Mango"}));
     
-    VectorRemove(v, (char *){"Banana"}, 1);
+    VectorRemove(v, (char *){"Banana"});
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s\n", *(char **)VectorGetAt(v, 0), *(char **)VectorGetAt(v, 1));
-    printf("apple : %zu mango : %zu\n", VectorGetIndex(v, (char*){"Apple"}, 1), VectorGetIndex(v, (char*){"Mango"}, 1));
+    printf("apple : %zu mango : %zu\n", VectorGetIndex(v, (char*){"Apple"}), VectorGetIndex(v, (char*){"Mango"}));
     //char **fruits = (char **)VectorGetArray(v);
     char **fruits = malloc(32);
     VectorCopyTo(v, 0, fruits);
     printf("%s %s\n", fruits[0], fruits[1]);
 
-
+    printf("\n-----Test-----\n");
     Test(v);
     VectorFree(v);
+    printf("\n-----Test 2------\n");
     Test2();
     return 0;
 }
