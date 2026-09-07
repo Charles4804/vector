@@ -14,7 +14,7 @@ int VectorNew(Vector *v, size_t item_size)
     v->item_size = item_size;
     v->count = 0;
     v->capacity = 2;
-    if ((v->data = (void *)malloc(v->capacity * v->item_size)) == nullptr)
+    if ((v->data = (void *)malloc(v->capacity * v->item_size)) == NULL)
     {
         return 1;
     }
@@ -27,7 +27,7 @@ int VectorAdd(Vector *v, const void *item)
     {
         void *tmp;
         v->capacity *= 2;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
+        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
         {
             return 1;
         }
@@ -145,7 +145,7 @@ int VectorInsert(Vector *v, size_t index, const void *value)
     {
         void *tmp;
         v->capacity *= 2;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
+        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
         {
             return 1;
         }
@@ -166,7 +166,7 @@ int _VectorInsert(Vector *v, size_t index, const void *value)
     {
         void *tmp;
         v->capacity *= 2;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
+        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
         {
             return 1;
         }
@@ -191,7 +191,7 @@ int VectorAddRange(Vector *restrict dest, Vector *restrict v)
             dest->capacity <<= 1;
         }
         void *tmp;
-        if ((tmp = realloc(dest->data, dest->capacity * dest->item_size)) == nullptr)
+        if ((tmp = realloc(dest->data, dest->capacity * dest->item_size)) == NULL)
         {
             return 1;
         }
@@ -211,7 +211,7 @@ int VectorEnsureCapacity(Vector *v, size_t capacity)
             v->capacity <<= 1;
         }
         void *tmp;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == nullptr)
+        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
         {
             return 1;
         }
@@ -224,7 +224,7 @@ void *VectorGetAt(Vector *v, size_t index)
 {
     if (index >= v->count)
     {
-        return nullptr;
+        return NULL;
     }
     return (void *)((char *)v->data + (index * v->item_size));
 }
@@ -242,7 +242,7 @@ void *__VectorGet(Vector *v, const void *value, int p)
                 return (void *)((char *)v->data + (v->item_size * i));
             }
         }      
-        return nullptr;
+        return NULL;
     }
     char *target_addr;
     for (size_t i = 0; i < v->count; i++)
@@ -253,7 +253,7 @@ void *__VectorGet(Vector *v, const void *value, int p)
             return (void *)((char *)v->data + (v->item_size * i));     
         }
     }
-    return nullptr;
+    return NULL;
 }
 
 void *VectorGetData(Vector *v)

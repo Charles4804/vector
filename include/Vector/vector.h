@@ -25,22 +25,22 @@ typedef struct
     size_t item_size;
 } Vector;
 
-#define VectorGet(v, value) _Generic((value), \
+#define VectorGet(v, value) _Generic((__typeof__(value)){0}, \
                                      char *: __VectorGet((v), (value), 1), \
                                      default: __VectorGet((v), (value), 0) \
 )
 
-#define VectorGetIndex(v, value) _Generic((value), \
+#define VectorGetIndex(v, value) _Generic((__typeof__(value)){0}, \
                                           char *: __VectorGetIndex((v), (value), 1), \
                                           default: __VectorGetIndex((v), (value), 0) \
 )
 
-#define VectorContains(v, value) _Generic((value), \
+#define VectorContains(v, value) _Generic((__typeof__(value)){0}, \
                                           char *: __VectorContains((v), (value), 1), \
                                           default: __VectorContains((v), (value), 0)\
 )
 
-#define VectorRemove(v, value) _Generic((value), \
+#define VectorRemove(v, value) _Generic((__typeof__(value)){0}, \
                                         char *: __VectorRemove((v), (value), 1), \
                                         default: __VectorRemove((v), (value), 0) \
 )

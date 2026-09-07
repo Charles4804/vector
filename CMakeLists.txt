@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.15)
-project(Vector VERSION 1.2.2 LANGUAGES C)
-set(CMAKE_C_STANDARD 23)
+cmake_minimum_required(VERSION 3.21)
+project(Vector VERSION 1.2.3 LANGUAGES C)
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
