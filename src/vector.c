@@ -26,7 +26,7 @@ int VectorAdd(Vector *v, const void *item)
     if (v->count == v->capacity)
     {
         void *tmp;
-        v->capacity *= 2;
+        v->capacity <<= 1;
         if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
         {
             return 1;

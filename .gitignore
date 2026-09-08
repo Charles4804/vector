@@ -25,7 +25,6 @@ _deps/
 *.dll
 *.dll.a
 *.su
-*.cmake.in
 *.sh
 *.exe
 *.out

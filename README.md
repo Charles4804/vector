@@ -19,11 +19,49 @@ This library provides a dynamic array implementation for C.
 - `string.h`
 - `stdlib.h`
 
-## Installation
-Download the latest release from the [Releases](https://github.com/Charles4804/vector/releases) section.
-And then extract the zip file. 
+## BUILDING THE LIBRARY
 
-**Linux**
----
-Put the **include** folder to /usr/local/include/Vector/ _Needs Elevated Privileges_
-And then put the lib folder's contents to /usr/local/lib/
+**Prerequisites**:
+- `CMake`
+- `Ninja`
+
+## Linux build instructions
+You can build the library either static (.a) or shared (.so)
+
+Replace `vN` in `-DARCH_LEVEL=vN` with your target microarchitecture (native, v1, v2, etc.)
+
+**Static**
+```bash
+
+cmake -G Ninja -B build \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DARCH_LEVEL=v2
+```
+
+**Shared**
+```bash 
+
+cmake -G Ninja -B build \
+    -DBUILD_SHARED_LIBS=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DARCH_LEVEL=v2
+```
+
+**Compile and Install**
+```bash
+
+cmake --build build
+cmake --install build --prefix release/
+```
+
+
+## Windows build instructions
+You can build the library as a dynamic link library(.dll) or a static library (.lib/.a)
+
+```bash
+
+cmake -G Ninja -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DARCH_LEVEL=native
+cmake --build build
+cmake --install build --prefix release/mingw
+```

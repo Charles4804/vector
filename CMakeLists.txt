@@ -5,11 +5,22 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_C_VISIBILITY_PRESET hidden)
-set(CMAKE_INLINES_VISIBILITY_ON 1)
+
+set(ARCH_LEVEL "v2" CACHE STRING "Target x86-64 microarchitecture level")
+
+if(ARCH_LEVEL STREQUAL "native")
+    set(TARGET_MARCH "native")
+elseif(ARCH_LEVEL STREQUAL "v1")
+    set(TARGET_MARCH "x86-64")
+else()
+    set(TARGET_MARCH "x86-64-${ARCH_LEVEL}")
+endif()
 
 add_library(Vector src/vector.c)
 
-#target_compile_options(Vector PRIVATE -O3 -march=native)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+    target_compile_options(Vector PRIVATE "-march=${TARGET_MARCH}")
+endif()
 
 if(BUILD_SHARED_LIBS)
     target_compile_definitions(Vector PRIVATE WINDOWS_DLL)
