@@ -99,17 +99,19 @@ int main(int argc, const char *argv[])
 
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s 2 : %s\n", *(char **)VectorGetAt(v, 0), *(char **)VectorGetAt(v, 1), *(char **)VectorGetAt(v, 2));
-    printf("0 : %d 1 : %d 2 : %d\n", VectorContains(v, (char*){"Apple"}), VectorContains(v, (char*){"Banana"}), VectorContains(v, (char*){"Mango"}));
+    printf("0 : %d 1 : %d 2 : %d\n", VectorContains(v, "Apple"), VectorContains(v, "Banana"), VectorContains(v, "Mango"));
     
-    VectorRemove(v, (char *){"Banana"});
+    VectorRemove(v, banana);
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %s 1 : %s\n", *(char **)VectorGetAt(v, 0), *(char **)VectorGetAt(v, 1));
-    printf("apple : %zu mango : %zu\n", VectorGetIndex(v, (char*){"Apple"}), VectorGetIndex(v, (char*){"Mango"}));
+    printf("apple : %zu mango : %zu\n", VectorGetIndex(v, "Apple"), VectorGetIndex(v, "Mango"));
     //char **fruits = (char **)VectorGetArray(v);
     char **fruits = malloc(32);
     VectorCopyTo(v, 0, fruits);
     printf("%s %s\n", fruits[0], fruits[1]);
-
+    VectorRemove(v, "Mango");
+    printf("%s\n", *(char **)VectorGetAt(v, 0));
+    
     printf("\n-----Test-----\n");
     Test(v);
     VectorFree(v);

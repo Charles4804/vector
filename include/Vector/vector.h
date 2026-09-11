@@ -39,24 +39,28 @@ typedef struct
 } Vector;
 
 #define VectorGet(v, value) _Generic((__typeof__(value)){0}, \
-                                     char *: __VectorGet((v), (value), 1), \
-                                     default: __VectorGet((v), (value), 0) \
-)
+                                     const char *: __VectorGetStr, \
+                                     char *: __VectorGetStr, \
+                                     default: __VectorGet \
+)(v, value)
 
 #define VectorGetIndex(v, value) _Generic((__typeof__(value)){0}, \
-                                          char *: __VectorGetIndex((v), (value), 1), \
-                                          default: __VectorGetIndex((v), (value), 0) \
-)
+                                          const char *: __VectorGetIndexStr, \
+                                          char *: __VectorGetIndexStr, \
+                                          default: __VectorGetIndex \
+)(v, value)
 
 #define VectorContains(v, value) _Generic((__typeof__(value)){0}, \
-                                          char *: __VectorContains((v), (value), 1), \
-                                          default: __VectorContains((v), (value), 0)\
-)
+                                          const char *: __VectorContainsStr, \
+                                          char *: __VectorContainsStr, \
+                                          default: __VectorContains \
+)(v, value)
 
 #define VectorRemove(v, value) _Generic((__typeof__(value)){0}, \
-                                        char *: __VectorRemove((v), (value), 1), \
-                                        default: __VectorRemove((v), (value), 0) \
-)
+                                        const char *: __VectorRemoveStr, \
+                                        char *: __VectorRemoveStr, \
+                                        default: __VectorRemove \
+)(v, value)
 
 VECTOR_API
 int VectorNew(Vector *v, size_t item_size);
@@ -71,7 +75,10 @@ VECTOR_API
 void _VectorRemoveAt(Vector *v, size_t);
 
 VECTOR_API
-int __VectorRemove(Vector *v, const void *value, int string);
+int __VectorRemove(Vector *v, const void *value);
+
+VECTOR_API
+int __VectorRemoveStr(Vector *v, const char *value);
 
 VECTOR_API
 int VectorRemoveRange(Vector *v, size_t a, size_t b);
@@ -80,7 +87,10 @@ VECTOR_API
 void _VectorRemoveRange(Vector *v, size_t a, size_t b);
 
 VECTOR_API
-int __VectorContains(Vector *v, const void *value, int p);
+int __VectorContains(Vector *v, const void *value);
+
+VECTOR_API
+int __VectorContainsStr(Vector *v, const char *value);
 
 VECTOR_API
 int VectorInsert(Vector *v, size_t index, const void *value);
@@ -98,7 +108,10 @@ VECTOR_API
 void *VectorGetAt(Vector *v, size_t index);
 
 VECTOR_API
-void *__VectorGet(Vector *v, const void *value, int p); 
+void *__VectorGet(Vector *v, const void *value); 
+
+VECTOR_API
+void *__VectorGetStr(Vector *v, const char *value);
 
 VECTOR_API
 void *VectorGetData(Vector *v);
@@ -116,7 +129,10 @@ VECTOR_API
 void VectorCopy(Vector *restrict v, void *restrict array);
 
 VECTOR_API
-size_t __VectorGetIndex(Vector *v, const void *value, int p);
+size_t __VectorGetIndex(Vector *v, const void *value);
+
+VECTOR_API
+size_t __VectorGetIndexStr(Vector *v, const char *value);
 
 VECTOR_API
 void VectorClear(Vector *v);

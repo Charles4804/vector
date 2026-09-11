@@ -57,32 +57,31 @@ void _VectorRemoveAt(Vector *v, size_t index)
     v->count--;
 }
 
-int __VectorRemove(Vector *v, const void *value, int p)
+int __VectorRemove(Vector *v, const void *value)
 {
     char *dest;
-    if (p)
-    {
-        char **target_addr;
-        for (size_t i = 0; i < v->count; i++)
-        {
-            target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, (char *)value))
-            {
-                dest = (char *)v->data + (v->item_size * i);
-
-                memmove(dest, dest + v->item_size, v->item_size * (v->count - (i + 1))); 
-                v->count--;
-                return 0;
-            }
-        }      
-        return 1;
-    }
     for (size_t i = 0; i < v->count; i++)
     {
         dest = (char *)v->data + (v->item_size * i);
         if (!memcmp(dest, value, v->item_size))
         {
             memmove(dest, dest + v->item_size, v->item_size * (v->count - (i + 1)));
+            v->count--;
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int __VectorRemoveStr(Vector *v, const char *value)
+{
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
+    {
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!strcmp(*(char **)target_addr, value))
+        {
+            memmove(target_addr, target_addr + v->item_size, v->item_size * (v->count - (i + 1)));
             v->count--;
             return 0;
         }
@@ -108,26 +107,27 @@ void _VectorRemoveRange(Vector *v, size_t a, size_t b)
     v->count -= (b - a) + 1;
 }
 
-int __VectorContains(Vector *v, const void *value, int p)
+int __VectorContains(Vector *v, const void *value)
 {
-    if (p)
-    {
-        char **target_addr;
-        for (size_t i = 0; i < v->count; i++)
-        {
-            target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, (char *)value))
-            {
-                return 0;
-            }
-        }      
-        return 1;
-    }
     char *target_addr;
     for (size_t i = 0; i < v->count; i++)
     {
         target_addr = (char *)v->data + (v->item_size * i);
         if (!memcmp(target_addr, value, v->item_size))
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int __VectorContainsStr(Vector *v, const char *value)
+{
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
+    {
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!strcmp(*(char **)target_addr, value))
         {
             return 0;
         }
@@ -229,21 +229,8 @@ void *VectorGetAt(Vector *v, size_t index)
     return (void *)((char *)v->data + (index * v->item_size));
 }
 
-void *__VectorGet(Vector *v, const void *value, int p)
+void *__VectorGet(Vector *v, const void *value)
 {
-    if (p)
-    {
-        char **target_addr;
-        for (size_t i = 0; i < v->count; i++)
-        {
-            target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, *(char **)value))
-            {
-                return (void *)((char *)v->data + (v->item_size * i));
-            }
-        }      
-        return NULL;
-    }
     char *target_addr;
     for (size_t i = 0; i < v->count; i++)
     {
@@ -251,6 +238,20 @@ void *__VectorGet(Vector *v, const void *value, int p)
         if (!memcmp(target_addr, value, v->item_size))
         {
             return (void *)((char *)v->data + (v->item_size * i));     
+        }
+    }
+    return NULL;
+}
+
+void *__VectorGetStr(Vector *v, const char *value)
+{
+    char *target_addr;
+    for (size_t i = 0; i < v->count; i++)
+    {
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!strcmp(*(char **)target_addr, value))
+        {
+            return (void *)target_addr;
         }
     }
     return NULL;
@@ -292,21 +293,8 @@ void VectorCopy(Vector *restrict v, void *restrict array)
     memcpy(array, v->data, v->item_size * v->count);
 }
 
-size_t __VectorGetIndex(Vector *v, const void *value, int p)
+size_t __VectorGetIndex(Vector *v, const void *value)
 {
-    if (p)
-    {
-        char **target_addr;
-        for (size_t i = 0; i < v->count; i++)
-        {
-            target_addr = (char **)((char *)v->data + (v->item_size * i));
-            if (!strcmp(*target_addr, (char *)value))
-            {
-                return i;
-            }
-        }      
-        return -1;
-    }
     char *target_addr;
     for (size_t i = 0; i < v->count; i++)
     {
@@ -314,6 +302,21 @@ size_t __VectorGetIndex(Vector *v, const void *value, int p)
         if (!memcmp(target_addr, value, v->item_size))
         {
             return i;     
+        }
+    }
+    return -1;
+}
+
+size_t __VectorGetIndexStr(Vector *v, const char *value)
+{
+    char *target_addr;
+
+    for (size_t i = 0; i < v->count; i++)
+    {
+        target_addr = (char *)v->data + (v->item_size * i);
+        if (!strcmp(*(char **)target_addr, value))
+        {
+            return i;
         }
     }
     return -1;
