@@ -59,8 +59,11 @@ void Test2()
     VectorRemoveRange(v, 1, 3);
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
     printf("0 : %d 1:%d\n", *(int *)VectorGetAt(v, 0), *(int *)VectorGetAt(v, 1));
+
+    /*
     Vector *vv = (Vector *)malloc(sizeof(Vector));
     VectorNew(vv, sizeof(int));
+    
     
     VectorAdd(vv, &(int){33});
     VectorAdd(vv, &(int){1463});
@@ -68,16 +71,18 @@ void Test2()
     VectorAdd(vv, &(int){6723});
     VectorAdd(vv, &(int){673});
     VectorAdd(vv, &(int){3});
-    
+    VectorAdd(vv, &(int){7822});
     printf("%zu %zu\n", v->capacity, v->count);
-    VectorAddRange(v, vv);
-    
+    _VectorInsertRange(v, vv, 0);
+    */ 
+    int vv[7] = {2312234, 235, 23242, 772, 988, 24892, 84242};
+    _VectorInsertRangeArray(v, vv, 0, 7);
     for (int i = 0; i < v->count; i++)
     {
         printf("%d\n", *(int *)VectorGetAt(v, i));
     }
     printf("%zu %zu\n", v->capacity, v->count);
-    VectorFree(vv);
+    //VectorFree(vv);
     VectorFree(v);
     free(v);
 }
@@ -111,7 +116,8 @@ int main(int argc, const char *argv[])
     printf("%s %s\n", fruits[0], fruits[1]);
     VectorRemove(v, "Mango");
     printf("%s\n", *(char **)VectorGetAt(v, 0));
-    
+    printf("%s\n", ((char **)v->data)[0]);
+
     printf("\n-----Test-----\n");
     Test(v);
     VectorFree(v);

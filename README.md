@@ -7,10 +7,6 @@
 ```                                     
 A C library providing dynamic array functionality.
 
-## Table of Contents
-- [About](#about)
-- [Installation](#installation)
-
 ## About
 This library provides a dynamic array implementation for C.
 

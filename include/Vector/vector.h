@@ -32,7 +32,7 @@
 
 typedef struct
 {
-    void *restrict data;
+    unsigned char *restrict data;
     size_t count;
     size_t capacity;
     size_t item_size;
@@ -99,7 +99,22 @@ VECTOR_API
 int _VectorInsert(Vector *v, size_t index, const void *value);
 
 VECTOR_API
+int _VectorInsertRange(Vector *restrict v, Vector *restrict src, size_t index);
+
+VECTOR_API
+int _VectorInsertRangeArray(Vector *restrict, void *restrict array, size_t index, size_t count);
+
+VECTOR_API
+int VectorInsertRange(Vector *restrict v, Vector *restrict src, size_t index);
+
+VECTOR_API
+int VectorInsertRangeArray(Vector *restrict, void *restrict array, size_t index, size_t capacity);
+
+VECTOR_API
 int VectorAddRange(Vector *restrict dest ,Vector *restrict v);
+
+VECTOR_API
+int VectorAddRangeArray(Vector *restrict v, void *restrict array, size_t capacity);
 
 VECTOR_API
 int VectorEnsureCapacity(Vector *v, size_t capacity);
