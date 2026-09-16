@@ -77,6 +77,7 @@ void Test2()
     */ 
     int vv[7] = {2312234, 235, 23242, 772, 988, 24892, 84242};
     _VectorInsertRangeArray(v, vv, 0, 7);
+    VectorReverseRange(v, 0, 7);
     for (int i = 0; i < v->count; i++)
     {
         printf("%d\n", *(int *)VectorGetAt(v, i));
@@ -108,6 +109,7 @@ int main(int argc, const char *argv[])
     
     VectorRemove(v, banana);
     printf("count : %zu capacity : %zu\n", v->count, v->capacity);
+    VectorReverseHeap(v);
     printf("0 : %s 1 : %s\n", *(char **)VectorGetAt(v, 0), *(char **)VectorGetAt(v, 1));
     printf("apple : %zu mango : %zu\n", VectorGetIndex(v, "Apple"), VectorGetIndex(v, "Mango"));
     //char **fruits = (char **)VectorGetArray(v);
@@ -117,6 +119,7 @@ int main(int argc, const char *argv[])
     VectorRemove(v, "Mango");
     printf("%s\n", *(char **)VectorGetAt(v, 0));
     printf("%s\n", ((char **)v->data)[0]);
+    
 
     printf("\n-----Test-----\n");
     Test(v);

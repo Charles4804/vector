@@ -324,6 +324,108 @@ int VectorAddRangeArray(Vector *restrict v, void *restrict array, size_t count)
     return 0;
 }
 
+void VectorReverse(Vector *v)
+{
+    unsigned char tmp[v->item_size];
+    unsigned char *a = v->data;
+    unsigned char *b = v->data + (v->item_size * (v->count - 1));
+
+    while (a < b)
+    {
+        memcpy(tmp, a, v->item_size);
+        memcpy(a, b, v->item_size);
+        memcpy(b, tmp, v->item_size);
+
+        a += v->item_size;
+        b -= v->item_size;
+    }
+}
+
+void VectorReverseRange(Vector *v, size_t a, size_t b)
+{
+    unsigned char tmp[v->item_size];
+    unsigned char *aa = v->data + (v->item_size * a);
+    unsigned char *bb = v->data + (v->item_size * (b - 1));
+    
+    while (a < b)
+    {
+        memcpy(tmp, aa, v->item_size);
+        memcpy(aa, bb, v->item_size);
+        memcpy(bb, tmp, v->item_size);
+
+        a += v->item_size;
+        b -= v->item_size;
+    }
+}
+
+void VectorReverseSafe(Vector *v)
+{
+    unsigned char *a = v->data;
+    unsigned char *b = v->data + (v->item_size * (v->count - 1));
+    
+    while (a < b)
+    {
+        for (size_t i = 0; i < v->item_size; i++)
+        {
+            unsigned char tmp = a[i];
+            a[i] = b[i];
+            b[i] = tmp;
+        }
+        a += v->item_size;
+        b -= v->item_size;
+    }
+}
+
+void VectorReverseRangeSafe(Vector *v, size_t a, size_t b)
+{
+    unsigned char *aa = v->data + (v->item_size * a);
+    unsigned char *bb = v->data + (v->item_size * (b - 1));
+    
+    while (aa < bb)
+    {
+        for (size_t i = 0; i < v->item_size; i++)
+        {
+            unsigned char tmp = aa[i];
+            aa[i] = bb[i];
+            bb[i] = tmp;
+        }
+        aa += v->item_size;
+        bb -= v->item_size;
+    }
+}
+
+void VectorReverseHeap(Vector *v)
+{
+    unsigned *tmp = malloc(v->item_size);
+    unsigned char *a = v->data;
+    unsigned char *b = v->data + (v->item_size * (v->count - 1));
+    
+    while (a < b)
+    {
+        memcpy(tmp, a, v->item_size);
+        memcpy(a, b, v->item_size);
+        memcpy(b, tmp, v->item_size);
+        a += v->item_size;
+        b -= v->item_size;
+    }
+}
+
+void VectorReverseRangeHeap(Vector *v, size_t a, size_t b)
+{
+    unsigned *tmp = malloc(v->item_size);
+    unsigned char *aa = v->data + (v->item_size * a);
+    unsigned char *bb = v->data + (v->item_size * (b - 1));
+    
+    while (aa < bb)
+    {
+        memcpy(tmp, aa, v->item_size);
+        memcpy(aa, bb, v->item_size);
+        memcpy(bb, tmp, v->item_size);
+        aa += v->item_size;
+        bb -= v->item_size;
+    }
+}
+
 int VectorEnsureCapacity(Vector *v, size_t capacity)
 {
     if (v->capacity < capacity)

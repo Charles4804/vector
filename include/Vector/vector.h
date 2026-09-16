@@ -117,6 +117,24 @@ VECTOR_API
 int VectorAddRangeArray(Vector *restrict v, void *restrict array, size_t capacity);
 
 VECTOR_API
+void VectorReverse(Vector *v);
+
+VECTOR_API
+void VectorReverseRange(Vector *v, size_t a, size_t b);
+
+VECTOR_API
+void VectorReverseSafe(Vector *v);
+
+VECTOR_API
+void VectorReverseRangeSafe(Vector *v, size_t a, size_t b);
+
+VECTOR_API
+void VectorReverseHeap(Vector *v);
+
+VECTOR_API
+void VectorReverseRangeHeap(Vector *v, size_t a, size_t b);
+
+VECTOR_API
 int VectorEnsureCapacity(Vector *v, size_t capacity);
 
 VECTOR_API
