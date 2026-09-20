@@ -181,7 +181,7 @@ int _VectorInsert(Vector *v, size_t index, const void *value)
     return 0;    
 }
 
-int _VectorInsertRange(Vector *restrict v, Vector *restrict src, size_t index)
+int _VectorInsertRange(Vector *v, Vector *src, size_t index)
 {
     size_t x = v->count + src->count;
     if (x >= v->capacity)
@@ -228,7 +228,7 @@ int _VectorInsertRangeArray(Vector *restrict v, void *restrict array, size_t ind
 }
 
 
-int VectorInsertRange(Vector *restrict v, Vector *restrict src, size_t index)
+int VectorInsertRange(Vector *v, Vector *src, size_t index)
 {
     if (index > v->count)
     {
@@ -282,7 +282,7 @@ int VectorInsertRangeArray(Vector *restrict v, void *restrict array, size_t inde
     return 0;
 }
 
-int VectorAddRange(Vector *restrict dest, Vector *restrict v)
+int VectorAddRange(Vector *dest, Vector *v)
 {
     size_t x = dest->count + v->count;
     if (x >= dest->capacity)
@@ -319,7 +319,7 @@ int VectorAddRangeArray(Vector *restrict v, void *restrict array, size_t count)
         }
         v->data = tmp;
     }
-    memcpy(v + (v->item_size * v->count), array, v->item_size * count);
+    memcpy(v->data + (v->item_size * v->count), array, v->item_size * count);
     v->count += count;
     return 0;
 }
