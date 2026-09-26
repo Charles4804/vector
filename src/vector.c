@@ -186,22 +186,24 @@ int _VectorInsertRange(Vector *v, Vector *src, size_t index)
     size_t x = v->count + src->count;
     if (x >= v->capacity)
     {
-        while (v->capacity < x)
+        size_t nc = v->capacity;
+        while (nc < x)
         {
-            v->capacity <<= 1;
+            nc <<= 1;
         }
         unsigned char *tmp;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
+        if ((tmp = realloc(v->data, nc * v->item_size)) == NULL)
         {
             return 1;
         }
+        v->capacity = nc;
         v->data = tmp;
     }
     unsigned char *s = v->data + (v->item_size * index);
 
     memmove(s + (v->item_size * src->count), s, v->item_size * (v->count - index));
     memcpy(s, src->data, v->item_size * src->count);
-    v->count += src->count;
+    v->count = x;
     return 0;
 }
 
@@ -210,20 +212,23 @@ int _VectorInsertRangeArray(Vector *restrict v, void *restrict array, size_t ind
     size_t x = v->count + count;
     if (x >= v->capacity)
     {
-        while (v->capacity < x)
+        size_t nc = v->capacity;
+        while (nc < x)
         {
-            v->capacity <<= 1;
+            nc <<= 1;
         }
         unsigned char *tmp;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
+        if ((tmp = realloc(v->data, nc * v->item_size)) == NULL)
         {
             return 1;
         }
+        v->capacity = nc;
+        v->data = tmp;
     }
     unsigned char *s = v->data + (v->item_size * index);
     memmove(s + (v->item_size * count), s, v->item_size * (v->count - index));
     memcpy(s, array, v->item_size * count);
-    v->count += count;
+    v->count = x;
     return 0;
 }
 
@@ -237,22 +242,24 @@ int VectorInsertRange(Vector *v, Vector *src, size_t index)
     size_t x = v->count + src->count;
     if (x >= v->capacity)
     {
-        while (v->capacity < x)
+        size_t nc = v->capacity;
+        while (nc < x)
         {
-            v->capacity <<= 1;
+            nc <<= 1;
         }
         unsigned char *tmp;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
+        if ((tmp = realloc(v->data, nc * v->item_size)) == NULL)
         {
             return 1;
         }
+        v->capacity = nc;
         v->data = tmp;
     }
     unsigned char *s = v->data + (v->item_size * index);
 
     memmove(s + (v->item_size * src->count), s, v->item_size * (v->count - index));
     memcpy(s, src->data, v->item_size * src->count);
-    v->count += src->count;
+    v->count = x;
     return 0;
 }
 
@@ -265,20 +272,23 @@ int VectorInsertRangeArray(Vector *restrict v, void *restrict array, size_t inde
     size_t x = v->count + count;
     if (x >= v->capacity)
     {
-        while (v->capacity < x)
+        size_t nc = v->capacity;
+        while (nc < x)
         {
-            v->capacity <<= 1;
+            nc <<= 1;
         }
         unsigned char *tmp;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
+        if ((tmp = realloc(v->data, nc * v->item_size)) == NULL)
         {
             return 1;
         }
+        v->capacity = nc;
+        v->data = tmp;
     }
     unsigned char *s = v->data + (v->item_size * index);
     memmove(s + (v->item_size * count), s, v->item_size * (v->count - index));
     memcpy(s, array, v->item_size * count);
-    v->count += count;
+    v->count = x;
     return 0;
 }
 
@@ -287,19 +297,21 @@ int VectorAddRange(Vector *dest, Vector *v)
     size_t x = dest->count + v->count;
     if (x >= dest->capacity)
     {
-        while (dest->capacity < x)
+        size_t nc = dest->capacity;
+        while (nc < x)
         {
-            dest->capacity <<= 1;
+            nc <<= 1;
         }
         unsigned char *tmp;
-        if ((tmp = realloc(dest->data, dest->capacity * dest->item_size)) == NULL)
+        if ((tmp = realloc(dest->data, nc * dest->item_size)) == NULL)
         {
             return 1;
         }
+        dest->capacity = nc;
         dest->data = tmp;
     }
     memcpy(dest->data + (dest->item_size * dest->count), v->data, v->item_size * v->count);
-    dest->count += v->count;
+    dest->count = x;
     return 0;
 }
 
@@ -308,19 +320,21 @@ int VectorAddRangeArray(Vector *restrict v, void *restrict array, size_t count)
     size_t x = v->count + count;
     if (x >= v->capacity)
     {
-        while (v->capacity < x)
+        size_t nc = v->capacity;
+        while (nc < x)
         {
-            v->capacity <<= 1;
+            nc <<= 1;
         }
         unsigned char *tmp;
-        if ((tmp = realloc(v->data, v->capacity * v->item_size)) == NULL)
+        if ((tmp = realloc(v->data, nc * v->item_size)) == NULL)
         {
             return 1;
         }
+        v->capacity = nc;
         v->data = tmp;
     }
     memcpy(v->data + (v->item_size * v->count), array, v->item_size * count);
-    v->count += count;
+    v->count = x;
     return 0;
 }
 
