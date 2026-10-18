@@ -30,6 +30,8 @@ _deps/
 *.out
 *.app
 *.asm
+.clangd
+.vscode
 pack
 
 tests/
