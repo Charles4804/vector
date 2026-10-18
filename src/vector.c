@@ -1,14 +1,5 @@
 #include "Vector/vector.h"
 
-// ||||||||||||||||||||||||||||||||||||||||||
-//   _    ________________________  ____  |||
-//  | |  / / ____/ ____/_  __/ __ \/ __ \ |||
-//  | | / / __/ / /     / / / / / / /_/ / |||
-//  | |/ / /___/ /___  / / / /_/ / _, _/  |||
-//  |___/_____/\____/ /_/  \____/_/ |_|   |||  
-//   --by Charles4804                     |||
-//   ---protected by MIT license          |||
-
 int VectorNew(Vector *v, size_t item_size)
 {
     v->item_size = item_size;
@@ -361,14 +352,14 @@ void VectorReverseRange(Vector *v, size_t a, size_t b)
     unsigned char *aa = v->data + (v->item_size * a);
     unsigned char *bb = v->data + (v->item_size * (b - 1));
     
-    while (a < b)
+    while (aa < bb)
     {
         memcpy(tmp, aa, v->item_size);
         memcpy(aa, bb, v->item_size);
         memcpy(bb, tmp, v->item_size);
 
-        a += v->item_size;
-        b -= v->item_size;
+        aa += v->item_size;
+        bb -= v->item_size;
     }
 }
 
@@ -422,6 +413,7 @@ void VectorReverseHeap(Vector *v)
         a += v->item_size;
         b -= v->item_size;
     }
+    free(tmp);
 }
 
 void VectorReverseRangeHeap(Vector *v, size_t a, size_t b)
@@ -438,6 +430,7 @@ void VectorReverseRangeHeap(Vector *v, size_t a, size_t b)
         aa += v->item_size;
         bb -= v->item_size;
     }
+    free(tmp);
 }
 
 int VectorEnsureCapacity(Vector *v, size_t capacity)
