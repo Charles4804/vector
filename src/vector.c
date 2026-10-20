@@ -31,7 +31,7 @@ int VectorAdd(Vector *v, const void *item)
 
 int VectorRemoveAt(Vector *v, size_t index)
 {
-    if (index >= v->count)
+    if (index >= v->count || index < 0)
     {
         return 1;
     }
@@ -82,7 +82,7 @@ int __VectorRemoveStr(Vector *v, const char *value)
 
 int VectorRemoveRange(Vector *v, size_t a, size_t b)
 {
-    if (a > b || b >= v->count)
+    if (a < 0 || a >= b || b < 0 || b >= v->count)
     {
         return 1;
     }
@@ -128,7 +128,7 @@ int __VectorContainsStr(Vector *v, const char *value)
 
 int VectorInsert(Vector *v, size_t index, const void *value)
 {
-    if (index > v->count)
+    if (index > v->count || index < 0)
     {
         return 1;
     }
@@ -226,7 +226,7 @@ int _VectorInsertRangeArray(Vector *restrict v, void *restrict array, size_t ind
 
 int VectorInsertRange(Vector *v, Vector *src, size_t index)
 {
-    if (index > v->count)
+    if (index > v->count || index < 0)
     {
         return 1;
     }
@@ -256,7 +256,7 @@ int VectorInsertRange(Vector *v, Vector *src, size_t index)
 
 int VectorInsertRangeArray(Vector *restrict v, void *restrict array, size_t index, size_t count)
 {
-    if (index > v->count)
+    if (index > v->count || index < 0)
     {
         return 1;
     }
@@ -463,7 +463,7 @@ int VectorEnsureCapacity(Vector *v, size_t capacity)
 
 void *VectorGetAt(Vector *v, size_t index)
 {
-    if (index >= v->count)
+    if (index >= v->count || index < 0)
     {
         return NULL;
     }
@@ -505,7 +505,7 @@ void *VectorGetData(Vector *v)
 
 int VectorReplace(Vector *v, size_t index, const void *value)
 {
-    if (index >= v->count)
+    if (index >= v->count || index < 0)
     {
         return 1;
     }
@@ -520,7 +520,7 @@ void _VectorReplace(Vector *v, size_t index, const void *value)
 
 int VectorCopyTo(Vector *restrict v, size_t index, void *restrict array)
 {
-    if (index >= v->count)
+    if (index >= v->count || index < 0)
     {
         return 1;
     }
