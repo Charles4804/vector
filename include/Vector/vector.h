@@ -100,7 +100,7 @@ VECTOR_API int VectorRemoveAt(Vector *v, size_t index);
  * @param v Vector to modify.
  * @param index Index to remove; must be less than count.
  */
-VECTOR_API void _VectorRemoveAt(Vector *v, size_t);
+VECTOR_API void _VectorRemoveAt(Vector *v, size_t index);
 
 /**
  * @brief Removes the first item whose bytes match value.
