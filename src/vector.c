@@ -399,9 +399,13 @@ void VectorReverseRangeSafe(Vector *v, size_t a, size_t b)
     }
 }
 
-void VectorReverseHeap(Vector *v)
+int VectorReverseHeap(Vector *v)
 {
     unsigned *tmp = malloc(v->item_size);
+    if (tmp == NULL)
+    {
+        return 1;
+    }
     unsigned char *a = v->data;
     unsigned char *b = v->data + (v->item_size * (v->count - 1));
     
@@ -414,11 +418,16 @@ void VectorReverseHeap(Vector *v)
         b -= v->item_size;
     }
     free(tmp);
+    return 0;
 }
 
-void VectorReverseRangeHeap(Vector *v, size_t a, size_t b)
+int VectorReverseRangeHeap(Vector *v, size_t a, size_t b)
 {
     unsigned *tmp = malloc(v->item_size);
+    if (tmp == NULL)
+    {
+        return 1;
+    }
     unsigned char *aa = v->data + (v->item_size * a);
     unsigned char *bb = v->data + (v->item_size * (b - 1));
     
@@ -431,6 +440,7 @@ void VectorReverseRangeHeap(Vector *v, size_t a, size_t b)
         bb -= v->item_size;
     }
     free(tmp);
+    return 0;
 }
 
 int VectorEnsureCapacity(Vector *v, size_t capacity)
