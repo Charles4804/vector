@@ -259,19 +259,16 @@ VECTOR_API void VectorReverseRangeSafe(Vector *v, size_t a, size_t b);
 /**
  * @brief Reverses all items using a temporary heap allocation.
  * @param v Non-empty vector to reverse.
- * @warning The temporary allocation is freed, but allocation failure is not checked.
  */
-VECTOR_API void VectorReverseHeap(Vector *v);
+VECTOR_API int VectorReverseHeap(Vector *v);
 
 /**
  * @brief Reverses [a, b) using a temporary heap allocation.
  * @param v Vector to modify.
  * @param a First item index; the range must be non-empty and within the vector.
  * @param b One past the last item index; must be no greater than count.
- * @warning Allocation failure is not checked, and the temporary allocation is
- *          not freed by the current implementation.
  */
-VECTOR_API void VectorReverseRangeHeap(Vector *v, size_t a, size_t b);
+VECTOR_API int VectorReverseRangeHeap(Vector *v, size_t a, size_t b);
 
 /**
  * @brief Ensures capacity is at least the requested number of items.
